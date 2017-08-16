@@ -2,7 +2,6 @@
 #include <vector>
 #include <time.h>
 #include <cstdlib>
-#include <limits>
 
 #include "Tour.h"
 #include "Utils.h"
@@ -38,12 +37,18 @@ int main(){
 
     while(end(pop)){
         //seleciona a proxima pop
-
+        cout<<"fazendo torneio"<<endl;
+        tournament(pop);
         //realiza o crossover
+        cout<<"fazendo cross"<<endl;
         crossPop(pop);
+        cout<<"saiu do cross"<<endl;
         //realiza a mutação
+        cout<<"fazendo mutação"<<endl;
         mutate(pop);
     }
+
+    cout<<getMinFit(pop);
 
     return(0);
 }

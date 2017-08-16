@@ -2,11 +2,12 @@
 
 void mutation(Tour& t){
     if(rand()%100 > 2){
-        int index1{rand()%t.getPath().size()}, index2{rand()%t.getPath().size()};
+        int index1{rand()%(int)t.getPath().size()}, index2{rand()%(int)t.getPath().size()};
         
         while(index1==index2){
             index2=rand()%t.getPath().size();
         }
+        
         t.swap(t.getPath()[index1],t.getPath()[index2]);
     }
 }
@@ -41,7 +42,7 @@ bool contains(vector<ObjetoXeY> &p, ObjetoXeY &c){
     return(false);
 }
 
-double getMaxFit(vector<Tour> t){
+double getMaxFit(vector<Tour> &t){
     double max = MIN_LIM,tmp{0.0};
     for(Tour objT : t){
         tmp =getFitness(objT.getPath()); 
@@ -52,7 +53,7 @@ double getMaxFit(vector<Tour> t){
     return(max);
 }
 
-double getMinFit(vector<Tour> t){
+double getMinFit(vector<Tour> &t){
     double min = MAX_LIM,tmp{0.0};
     for(Tour objT : t){
         tmp = getFitness(objT.getPath());
@@ -79,20 +80,20 @@ double getFitness(vector<ObjetoXeY> &path){
     return(soma);
 }
 
-void tournament(vector<Tour> &pop, int tam){
+void tournament(vector<Tour> &pop){
     vector<Tour> tmp;
 
-    for(int i=0; i<tam; i++){
-        tmp.push_back(findMin(pop[rand()%tam], pop[rand()%tam], pop[rand()%tam]));
+    for(int i=0; i<pop.size(); i++){
+        tmp.push_back(findMin(pop[rand()%pop.size()], pop[rand()%pop.size()], pop[rand()%pop.size()]));
     }
     pop = tmp;
 }
 
-vector<ObjetoXeY> findMin(Tour &t1, Tour &t2, Tour &t3){
-    if(getFitness(t1) > getFitness(t2) && getFitness(t3) > getFitness(t2))
+Tour findMin(Tour &t1, Tour &t2, Tour &t3){
+    if(getFitness(t1.getPath()) > getFitness(t2.getPath()) && getFitness(t3.getPath()) > getFitness(t2.getPath()))
         return(t2);
-    if(getFitness(t2) > getFitness(t1) && getFitness(t3) > getFitness(t1))
+    if(getFitness(t2.getPath()) > getFitness(t1.getPath()) && getFitness(t3.getPath()) > getFitness(t1.getPath()))
         return(t1);
-    if(getFitness(t1) > getFitness(t3) && getFitness(t2) > getFitness(t3))
+    if(getFitness(t1.getPath()) > getFitness(t3.getPath()) && getFitness(t2.getPath()) > getFitness(t3.getPath()))
         return(t3);
 }

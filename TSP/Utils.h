@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <vector>
+#include <limits>
 #include "Tour.h"
 #include "ObjetoXeY.h"
 
@@ -22,8 +23,8 @@ double distance(ObjetoXeY&,ObjetoXeY&);
 
 double getFitness(vector<ObjetoXeY>&);
 
-void tournament(vector<Tour>&, int);
+void tournament(vector<Tour>&);
 
-vector<ObjetoXeY> findMin(Tour&, Tour&, Tour&);
+Tour findMin(Tour&, Tour&, Tour&);
 
 #endif
