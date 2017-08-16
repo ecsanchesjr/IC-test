@@ -40,3 +40,41 @@ bool contains(vector<ObjetoXeY> &p, ObjetoXeY &c){
     }
     return(false);
 }
+
+double getMaxFit(vector<Tour> t){
+    double max = MIN_LIM,tmp{0.0};
+    for(Tour objT : t){
+        tmp =getFitness(objT.getPath()); 
+        if(tmp > max){
+            max = tmp;
+        }
+    }
+    return(max);
+}
+
+double getMinFit(vector<Tour> t){
+    double min = MAX_LIM,tmp{0.0};
+    for(Tour objT : t){
+        tmp = getFitness(objT.getPath());
+        if(tmp<min){
+            min = tmp;
+        }
+    }
+    return(min);
+}
+
+double distance(ObjetoXeY &city1,ObjetoXeY &city2){
+    return(sqrt(pow((city1.x - city2.x),2)+pow((city1.y - city2.y),2)));
+}
+
+double getFitness(vector<ObjetoXeY> &path){
+    double soma{0};
+    for(int i=0;i<path.size();i++){
+        if(i+1 != path.size()){
+            soma+=distance(path[i], path[i+1]);
+        }else{
+            soma+=distance(path[i],path[0]);
+        }
+    }
+    return(soma);
+}

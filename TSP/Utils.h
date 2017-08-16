@@ -14,8 +14,11 @@ void mutation(Tour&);
 
 bool contains(vector<ObjetoXeY>&,ObjetoXeY&);
 
-double getMaxFit(vector<ObjetoXeY>&);
+double getMaxFit(vector<Tour>&);
 
-double getMinFit(vector<ObjetoXeY>&);
+double getMinFit(vector<Tour>&);
 
+double distance(ObjetoXeY&,ObjetoXeY&);
+
+double getFitness(vector<ObjetoXeY>&);
 #endif

@@ -13,12 +13,9 @@ class Tour{
 public:
     Tour(Map&);
     void swap(ObjetoXeY&,ObjetoXeY&);
-    double getFitness();
-    vector<ObjetoXeY> getPath();
+    vector<ObjetoXeY>& getPath();
 private:
     vector<ObjetoXeY> path;
-    double distance(ObjetoXeY&,ObjetoXeY&);
-    
 };
 
 #endif
