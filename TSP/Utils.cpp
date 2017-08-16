@@ -1,26 +1,43 @@
 #include "Utils.h"
 
 void mutation(Tour& t){
-    if(rand()%100 > 2){
+    if(rand()%100 < 2){
+        cout<<"entrou na mutacao"<<endl;
         int index1{rand()%(int)t.getPath().size()}, index2{rand()%(int)t.getPath().size()};
         
+        cout<<"comparando index"<<endl;
         while(index1==index2){
             index2=rand()%t.getPath().size();
         }
+        cout<<"terminou comp"<<endl;
         cout<<"chegou no swap";
         t.swap(t.getPath()[index1],t.getPath()[index2]);
+        cout<<"fim swap"<<endl;
+    }else{
+        cout<<"nao mutou"<<endl;
     }
+
 }
 
 void crossover(Tour& t1, Tour& t2){
-    if(rand()%100 > 80){
-        Tour tmp1{t1}, tmp2{t2};
+    if(rand()%100 < 80){
+        Tour tmp1(t1.getPath()), tmp2(t2.getPath());
         vector<ObjetoXeY> aux1, aux2;
-        
+
+        cout<<"bug1"<<endl;
         for(int i=(t1.getPath().size()/2);i<t1.getPath().size();i++){
-            aux1[i] = t1.getPath()[i] = tmp2.getPath()[i];
-            aux2[i] = t2.getPath()[i] = tmp1.getPath()[i];
+            cout<<"wow1 "<<i<<endl;
+            cout<<"t1 "<<t1.getPath().size()<<" t2 "<<t2.getPath().size()<<endl;
+            cout<<"tmp1 "<<tmp1.getPath().size()<<" tmp2 "<<tmp2.getPath().size()<<endl;
+            t1.getPath()[i] = tmp2.getPath()[i];
+            cout<<"wow2"<<endl;
+            aux1.push_back(tmp2.getPath()[i]);
+            cout<<"wow3"<<endl;
+            t2.getPath()[i] = tmp1.getPath()[i];
+            cout<<"wow4"<<endl;
+            aux2.push_back(tmp1.getPath()[i]);
         }
+        cout<<"bug2"<<endl;
         
         for(int i=0; i<t1.getPath().size();i++){
             if(!contains(aux1,tmp1.getPath()[i])){
@@ -30,6 +47,7 @@ void crossover(Tour& t1, Tour& t2){
                 t2.getPath()[i] = tmp2.getPath()[i];
             }
         }
+        cout<<"bug3"<<endl;
     }
 }
 

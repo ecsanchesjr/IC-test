@@ -43,6 +43,7 @@ int main(){
         //realiza o crossover
         cout<<"fazendo cross"<<endl;
         crossPop(pop);
+        pop[0].printPath();
         cout<<"saiu do cross"<<endl;
         //realiza a mutação
         cout<<"fazendo mutação"<<endl;
@@ -88,8 +89,10 @@ void mutate(vector<Tour> &t){
 }
 
 void crossPop(vector<Tour> &t){
+    cout<<"comecou for"<<endl;
     for(int i=0;i<t.size()/2;i++){
         crossover(t[rand()%t.size()],t[rand()%t.size()]);
     }
+    cout<<"terminou for"<<endl;
 }
 

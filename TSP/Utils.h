@@ -3,6 +3,10 @@
 
 #include <vector>
 #include <limits>
+
+#include <iostream>
+using namespace std;
+
 #include "Tour.h"
 #include "ObjetoXeY.h"
 
