@@ -2,11 +2,14 @@
 #include <vector>
 #include <time.h>
 #include <cstdlib>
+#include <limits>
+
 #include "Tour.h"
 #include "Utils.h"
 #include "Map.h"
 
-using namespace std;
+using std::cin;
+using std::vector;
 
 bool end(vector<Tour>&);
 
