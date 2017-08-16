@@ -7,7 +7,7 @@ void mutation(Tour& t){
         while(index1==index2){
             index2=rand()%t.getPath().size();
         }
-        
+        cout<<"chegou no swap";
         t.swap(t.getPath()[index1],t.getPath()[index2]);
     }
 }
@@ -80,13 +80,13 @@ double getFitness(vector<ObjetoXeY> &path){
     return(soma);
 }
 
-void tournament(vector<Tour> &pop){
+vector<Tour> tournament(vector<Tour> &pop){
     vector<Tour> tmp;
 
     for(int i=0; i<pop.size(); i++){
         tmp.push_back(findMin(pop[rand()%pop.size()], pop[rand()%pop.size()], pop[rand()%pop.size()]));
     }
-    pop = tmp;
+    return(tmp);
 }
 
 Tour findMin(Tour &t1, Tour &t2, Tour &t3){

@@ -38,7 +38,8 @@ int main(){
     while(end(pop)){
         //seleciona a proxima pop
         cout<<"fazendo torneio"<<endl;
-        tournament(pop);
+        pop=tournament(pop);
+        cout<<"passou do torneio"<<endl;
         //realiza o crossover
         cout<<"fazendo cross"<<endl;
         crossPop(pop);
@@ -46,6 +47,7 @@ int main(){
         //realiza a mutação
         cout<<"fazendo mutação"<<endl;
         mutate(pop);
+        cout<<"passou do mutate"<<endl;
     }
 
     cout<<getMinFit(pop);

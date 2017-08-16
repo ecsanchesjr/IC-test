@@ -23,7 +23,7 @@ double distance(ObjetoXeY&,ObjetoXeY&);
 
 double getFitness(vector<ObjetoXeY>&);
 
-void tournament(vector<Tour>&);
+vector<Tour> tournament(vector<Tour>&);
 
 Tour findMin(Tour&, Tour&, Tour&);
 
