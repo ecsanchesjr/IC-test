@@ -78,3 +78,21 @@ double getFitness(vector<ObjetoXeY> &path){
     }
     return(soma);
 }
+
+void tournament(vector<Tour> &pop, int tam){
+    vector<Tour> tmp;
+
+    for(int i=0; i<tam; i++){
+        tmp.push_back(findMin(pop[rand()%tam], pop[rand()%tam], pop[rand()%tam]));
+    }
+    pop = tmp;
+}
+
+vector<ObjetoXeY> findMin(Tour &t1, Tour &t2, Tour &t3){
+    if(getFitness(t1) > getFitness(t2) && getFitness(t3) > getFitness(t2))
+        return(t2);
+    if(getFitness(t2) > getFitness(t1) && getFitness(t3) > getFitness(t1))
+        return(t1);
+    if(getFitness(t1) > getFitness(t3) && getFitness(t2) > getFitness(t3))
+        return(t3);
+}
