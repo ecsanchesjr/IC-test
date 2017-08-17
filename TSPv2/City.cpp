@@ -22,3 +22,7 @@ bool City::operator==(const City &c) const{
         return(false);
     }
 }
+
+void City::printCity(){
+    cout<<"X "<<x<<" y "<<y<<endl;
+}

@@ -19,7 +19,7 @@ const int RES = 10000;
 /*
     funções de impresão
 */
-void printCityList(vector<City>&);
+void printCityList(const vector<City>&);
 
 void printListOfTours(Population&);
 
@@ -37,7 +37,7 @@ Tour elitism(Population&);
 
 Tour roulete(Population&);
 
-void crossover(Tour&,Tour&);
+void crossover(Population&,const int,const int);
 
 void mutation(Tour&);
 
@@ -51,6 +51,8 @@ double maxFitness(Population&);
 double minFitness(Population&);
 
 double compareDouble(const double,const double,const double=0.00001);
+
+bool contains(vector<City>&,City&);
 
 
 #endif

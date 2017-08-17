@@ -1,6 +1,9 @@
 #ifndef CITY_H
 #define CITY_H
 
+#include <iostream>
+using namespace std;
+
 class City{
 
 public:
@@ -13,6 +16,8 @@ public:
 
     //overload do operador de comparação
     bool operator==(const City &) const;
+    //fazer overload depois
+    void printCity();
 private:
     double x;
     double y;

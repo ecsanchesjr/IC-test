@@ -10,9 +10,9 @@ class Population{
 
 public:
     Population(Map&,const int = 10);
-    vector<Tour>* getListOfTour();
+    vector<Tour*> getListOfTour();
 private:
-    vector<Tour> *listOfTour;
+    vector<Tour*> listOfTour;
 };
 
 #endif
