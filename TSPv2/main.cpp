@@ -3,18 +3,16 @@
 #include "Tour.h"
 #include "Utils.h"
 
-
 using std::cout;
 using std::endl;
 
 int main(){
 
+    Map m1;
 
-    Map test;
+    Tour t(m1);
 
-    Population pop(test,10);
-
-    printListOfTours(pop);
+    printCityList(*t.getRoute());
 
     return(0);
 }

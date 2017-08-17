@@ -11,7 +11,6 @@ class Population{
 public:
     Population(Map&,const int = 10);
     vector<Tour>* getListOfTour();
-
 private:
     vector<Tour> *listOfTour;
 };
