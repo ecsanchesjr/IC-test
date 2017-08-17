@@ -16,7 +16,15 @@ vector<City>* Tour::getRoute(){
 }
 
 double Tour::getFitness(){
-
+    double sum{0.0};
+    for(int i=0;i<(*route).size();i++){
+        if((i+1) == (*route).size()){
+            sum+=distance(i,0);
+        }else{
+            sum+=distance(i,i+1);
+        }
+    }
+    return(1/sum);
 }
 
 void Tour::swap(const int a,const int b){

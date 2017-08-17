@@ -12,6 +12,7 @@ void printListOfTours(Population &pop){
         cout<<"Tour "<<i<<endl;
         printCityList((*t.getRoute()));
         ++i;
+        cout<<t.getFitness()<<endl;
         cout<<"<------------>"<<endl;
     }
 }
