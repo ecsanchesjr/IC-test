@@ -1,0 +1,30 @@
+#include "Tour.h"
+
+Tour::Tour(Map &map){
+    int size = map.getCityList().size();
+    route = new vector<City>;
+    for(City c : map.getCityList()){
+        (*route).push_back(c);
+    }
+    for(int i = 0;i<size;i++){
+        swap(rand()%size,rand()%size);
+    }
+}
+
+vector<City>* Tour::getRoute(){
+    return(route);
+}
+
+double Tour::getFitness(){
+
+}
+
+void Tour::swap(const int a,const int b){
+    City tmp = (*route)[a];
+    (*route)[a] = (*route)[b];
+    (*route)[b] = tmp;
+}
+
+double Tour::distance(const int a,const int b){
+    return(sqrt(pow(((*route)[a].getX())-((*route)[b].getX()),2)+pow(((*route)[a].getY())-((*route)[b].getY()),2)));
+}
