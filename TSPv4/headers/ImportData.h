@@ -18,8 +18,9 @@ class ImportData{
     public:
         ImportData(string);
         vector<City> getCitiesCoord();
+        string gettspName();
     private:
-        string tspName;
+        string tspName="N/A";
         string flag;
         string flagaux;
         ifstream myfile;
@@ -27,7 +28,6 @@ class ImportData{
         int dimension;
         void regexManager(string);
         bool findIgnoredWords(string);
-        string gettspName();
         void reader(string, string);
 
 };

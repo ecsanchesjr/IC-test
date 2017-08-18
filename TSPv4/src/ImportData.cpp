@@ -74,6 +74,7 @@ void ImportData::reader(string flag, string input)
 {
     if (flag == "name")
     {
+        tspName=input;
         //cout << input << " is a name! \n";
     }
     else if (flag == "type")
@@ -113,4 +114,7 @@ void ImportData::reader(string flag, string input)
 
 vector<City> ImportData::getCitiesCoord(){
     return citiescoord;
+}
+string ImportData::gettspName(){
+    return tspName;
 }
