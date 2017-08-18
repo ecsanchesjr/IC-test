@@ -79,10 +79,12 @@ void ImportData::reader(string flag, string input)
     }
     else if (flag == "type")
     {
+        type=input;
         //cout << input << " is a type! \n";
     }
     else if (flag == "comment")
     {
+        comment+=(input +" ");
         //cout << input << " is a comment! \n";
     }
     else if (flag == "dimension")
@@ -93,10 +95,12 @@ void ImportData::reader(string flag, string input)
     }
     else if (flag == "edge_type")
     {
+        edge_type=input;
         //cout << input << " is an edge_type! \n";
     }
     else if (flag == "node_comment")
     {
+        node_comment=input;
         //cout << input << " is an node_comment! \n";
     }
     else if (flag == "number" && flagaux == "wait for number")
@@ -111,10 +115,33 @@ void ImportData::reader(string flag, string input)
         citiescoord.push_back(City(x,y));
     }
 }
+void ImportData::printInfos(){
+    cout <<"Nome: " << gettspName() <<"\n";
+    cout<< "Tipo: " <<getType()<< "\n";
+    cout<< "Comentário: "<<getcomment()<<"\n";
+    cout<< "Tipo do Vértice: "<< getedge_type()<< "\n";
+    cout<< "Comentário do tipo de node: "<<getnode_comment()<<"\n";
+}
 
 vector<City> ImportData::getCitiesCoord(){
     return citiescoord;
 }
 string ImportData::gettspName(){
     return tspName;
+}
+string ImportData::getType(){
+    return type;
+}
+string ImportData::getedge_type(){
+    return edge_type;
+}
+string ImportData::getnode_comment(){
+    return node_comment;
+}
+string ImportData:: getcomment(){
+    if(comment==""){
+        return "N/A";
+    }else{
+        return comment;
+    }
 }

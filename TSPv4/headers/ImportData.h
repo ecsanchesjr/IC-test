@@ -19,8 +19,17 @@ class ImportData{
         ImportData(string);
         vector<City> getCitiesCoord();
         string gettspName();
+        string getType();
+        string getedge_type();
+        string getnode_comment();
+        string getcomment();
+        void printInfos();
     private:
         string tspName="N/A";
+        string type="N/A";
+        string comment="";
+        string edge_type="N/A";
+        string node_comment="N/A";
         string flag;
         string flagaux;
         ifstream myfile;

@@ -36,7 +36,7 @@ int main(){
 
     cout<<"Comecando o algoritmo ..."<<endl;
     ImportData dataFile(nome);
-    cout <<"Nome: " << dataFile.gettspName() <<"\n";
+    dataFile.printInfos();
 
     Map map(dataFile.getCitiesCoord());
 
@@ -72,7 +72,7 @@ int main(){
     cout<<"-----------------------------" << endl;
 
     cout<<"Tempo de execucao: "<<std::chrono::duration_cast<std::chrono::seconds>(tFinal - tInicial).count()<<" segundos!"<<endl;
-
+    dataFile.printInfos();
     return(0);
 }
 
