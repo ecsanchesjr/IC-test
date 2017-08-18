@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include <chrono>
 #include "City.h"
 #include "Map.h"
 #include "Tour.h"
@@ -12,7 +13,11 @@ using std::cout;
 using std::endl;
 using std::cin;
 
+
+typedef std::chrono::high_resolution_clock Clock;
+
 const long int LIMIT{500000};
+
 
 bool end(Population&);
 
@@ -26,8 +31,10 @@ int main(){
     cin>>nome;
     cout<<"Digite o tamanho de sua populacao: ";
     cin>>popSize;
-    cout<<"comecando o algoritmo..."<<endl;
+    
+    auto tInicial=Clock::now();  //startando cronometro
 
+    cout<<"Comecando o algoritmo ..."<<endl;
     ImportData dataFile(nome);
 
     Map map(dataFile.getCitiesCoord());
@@ -54,10 +61,16 @@ int main(){
         ++i;
     }
 
+    auto tFinal=Clock::now();
+
     cout<<(*pop)<<endl;
     cout<<i<<" geracoes depois!"<<endl;
     cout<<"Fitness maxima: "<<maxFitness((*pop).getPopulation())<<endl;
     cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
+
+    cout<<"-----------------------------" << endl;
+
+    cout<<"Tempo de execucao: "<<std::chrono::duration_cast<std::chrono::seconds>(tFinal - tInicial).count();<<" segundos!"<<endl;
 
     return(0);
 }
