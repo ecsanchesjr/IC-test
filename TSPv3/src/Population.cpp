@@ -6,9 +6,7 @@ Population::Population(Map &map,const int size){
     }
 }
 
-Population::Population(){
-
-}
+Population::Population(){ }
 
 vector<Tour>& Population::getPopulation(){
     return(population);   
@@ -59,24 +57,29 @@ void Population::mutation(const int a){
     }
 }
 
-void Population::crossover(const int a,const int b){
-    //copia dos tours pais
+void Population::crossover(const int a,const int b){  
+    // Realiza o crossover "cortando" a cauda dos pais passando para os filhos, depois o resto do cromossomo filho é gerado
+
     Tour tmp1{population[a]},tmp2{population[b]};
     vector<City> order1,order2;
     int size{(int)population[0].getRoute().size()},ctrl1{0},ctrl2{0};
-    for(int i=size/2;i<size;i++){
+    for(int i=size/2;i<size;i++){  
+        // Geração das caudas dos filhos
+
         population[a].getRoute()[i] = tmp2.getRoute()[i];
         order1.push_back(tmp2.getRoute()[i]);
         population[b].getRoute()[i] = tmp1.getRoute()[i];
         order2.push_back(tmp1.getRoute()[i]);
     }
     for(int i=0;i<size;i++){
-        if(!contains(order1,tmp1.getRoute()[i])){
+        // Geração do inicio do cromossomo filho
+
+        if(!contains(order1,tmp1.getRoute()[i])){  // Se a cidade não está no Tour Filho(devido ao crossover) será adicionada
             population[a].getRoute()[ctrl1] = tmp1.getRoute()[i];
             ++ctrl1;
         }else{//do nothing
         }
-        if(!contains(order2,tmp2.getRoute()[i])){
+        if(!contains(order2,tmp2.getRoute()[i])){ // Idem 
             population[b].getRoute()[ctrl2] = tmp2.getRoute()[i];
             ++ctrl2;
         }else{//do nothing
@@ -84,7 +87,7 @@ void Population::crossover(const int a,const int b){
     }
 }
 
-Tour Population::elitism(){
+Tour Population::elitism(){  // Mantem a melhor solução da geração, irá retornar o Tour
     double maxFit{maxFitness(population)};
     for(Tour t : (population)){
         if(compareDouble(t.getFitness(),maxFit)){
@@ -93,7 +96,7 @@ Tour Population::elitism(){
     }
 }
 
-Tour Population::roulete(){
+Tour Population::roulete(){  // Método de seleção Roleta
     double sumFitness{0.0},ctrl{0.0};
     int random{0};
     //acha o fitness total da população
@@ -113,7 +116,7 @@ Tour Population::roulete(){
 }
 
 
-ostream& operator<<(ostream &output,Population &pop){
+ostream& operator<<(ostream &output,Population &pop){  // Overload de operador para impressão da população
     int i{0};
     for(Tour t : pop.getPopulation()){
         output<<"Tour "<<setfill('0')<<setw(3)<<i<<endl;

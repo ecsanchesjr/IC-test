@@ -31,7 +31,7 @@ int main(){
 
     Population *pop = new Population(map,popSize);
 
-    while(!end(*pop)){
+    while(!end(*pop)){   // Roda enquanto nenhuma das condições de parada forem atendidas
 
         Population *oldPop = pop;
         pop = (*pop).newGeneration();
@@ -55,11 +55,11 @@ bool end(Population &pop){
     }else{
         genWithoutChanges++;
     }
-    if((maxFit-minFit)<(maxFit*0.05)){
+    if((maxFit-minFit)<(maxFit*0.05)){   // Amplitude de 5% entre a maior e menor fitness
         cout<<"Populacao convergiu!"<<endl;
         cout<<"Fitness maxima: "<<maxFit<<endl;
         return(true);
-    }else if(genWithoutChanges >= LIMIT){
+    }else if(genWithoutChanges >= LIMIT){  // Gerações sem alteração da melhor fitness
         cout<<"Populacao sem melhora a "<<genWithoutChanges<<" geracoes!"<<endl;
         cout<<"Fitness maxima: "<<maxFit<<endl;
         return(true);

@@ -3,7 +3,7 @@
 #include <iomanip>
 using namespace std;
 
-double convertRanges(const int n,const double rand){
+double convertRanges(const int n,const double rand){ 
     return((rand*n)/RES);
 }
 
@@ -12,7 +12,7 @@ double compareDouble(const double a,const double b,const double delta){
     return(abs(a-b)<relativeDelta);
 }
 
-double maxFitness(vector<Tour> &tours){
+double maxFitness(vector<Tour> &tours){  // Retorna a maior Fitness da população
     double max = -1*numeric_limits<double>::max(),fitness{0.0};
     for(Tour t : tours){
         fitness = t.getFitness();
@@ -23,7 +23,7 @@ double maxFitness(vector<Tour> &tours){
     return(max);
 }
 
-double minFitness(vector<Tour> &tours){
+double minFitness(vector<Tour> &tours){  // Retorna a menor Fitness da população
     double min = numeric_limits<double>::max(),fitness{0.0};
     for(Tour t : tours){
         fitness = t.getFitness();
@@ -34,7 +34,7 @@ double minFitness(vector<Tour> &tours){
     return(min);
 }
 
-bool contains(vector<City> &vec,City &c){
+bool contains(vector<City> &vec,City &c){  // Irá verificar se a cidade já existe no Tour
     for(City objC : vec){
         if(objC == c){
             return(true);

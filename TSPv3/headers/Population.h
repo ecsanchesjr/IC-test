@@ -28,7 +28,7 @@ public:
     vector<Tour>& getPopulation();
 
     Population* newGeneration();
-//private:
+private:
     vector<Tour> population;
     //realiza a mutação em todos os tours
     void mutate();
