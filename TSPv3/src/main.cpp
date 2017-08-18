@@ -32,7 +32,19 @@ int main(){
 
     Map map(dataFile.getCitiesCoord());
 
+    for(City c : map.getCityList()){
+        cout<<c<<endl;
+    }
+
+    cout<<"comecando a processar..."<<endl;
+
     Population *pop = new Population(map,popSize);
+
+    cout<<"Primeira populacao: "<<endl;
+    cout<<(*pop)<<endl;
+    cout<<"Melhor fitness: "<<maxFitness((*pop).getPopulation());
+    cout<<"distancia: "<<1/maxFitness((*pop).getPopulation())<<endl;
+    
 
     while(!end(*pop)){   // Roda enquanto nenhuma das condições de parada forem atendidas
 
@@ -44,6 +56,8 @@ int main(){
 
     cout<<(*pop)<<endl;
     cout<<i<<" geracoes depois!"<<endl;
+    cout<<"Fitness maxima: "<<maxFitness((*pop).getPopulation())<<endl
+    cout<<"distancia: "<<1/maxFitness((*pop).getPopulation())<<endl;
 
     return(0);
 }
@@ -60,11 +74,9 @@ bool end(Population &pop){
     }
     if((maxFit-minFit)<(maxFit*0.05)){   // Amplitude de 5% entre a maior e menor fitness
         cout<<"Populacao convergiu!"<<endl;
-        cout<<"Fitness maxima: "<<maxFit<<endl;
         return(true);
     }else if(genWithoutChanges >= LIMIT){  // Gerações sem alteração da melhor fitness
         cout<<"Populacao sem melhora a "<<genWithoutChanges<<" geracoes!"<<endl;
-        cout<<"Fitness maxima: "<<maxFit<<endl;
         return(true);
     }else{
         return(false);
