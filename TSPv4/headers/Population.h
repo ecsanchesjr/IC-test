@@ -42,5 +42,7 @@ private:
     Tour elitism();
     
     Tour roulete();
+
+    void crossoverPMX(const int, const int);
 };
 #endif

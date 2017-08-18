@@ -45,7 +45,7 @@ void Population::cross(){
     //tamanho da população
     int size{(int)population.size()};
     for(int i=0;i<size/2;i++){
-        crossover(rand()%size,rand()%size);
+        crossoverPMX(rand()%size,rand()%size);
     }
 }
 
@@ -127,4 +127,33 @@ ostream& operator<<(ostream &output,Population &pop){  // Overload de operador p
     }
     return(output);
 }
+
+
+// CROS
+
+/*
+    Irá definir o ponto de corte entre os dois pais
+    Nesse ponto irá "jogar" o gene de um pai para o outro, alterando as posições iguais
+    Serão gerados os filhos a partir disso.
+*/
+void Population::crossoverPMX(const int a, const int b){
+    Tour tmp1{population[a]}, tmp2{population[b]};
+    int size{(int)population[0].getRoute().size()};
+    int index1{rand()%size}, index2{rand()%size};
+    
+    if(index1 > index2){    
+        int tmp{index1};
+        index1=index2;
+        index2=tmp;
+    }
+
+    for(int i=index1; i<index2; i++){
+        population[a].swap(i,population[a].findCity(tmp2.getRoute()[i]));
+        population[a].getRoute()[i] = tmp2.getRoute()[i];
+
+        population[b].swap(i,population[b].findCity(tmp1.getRoute()[i]));
+        population[b].getRoute()[i] = tmp1.getRoute()[i];
+    }
+}
+
 

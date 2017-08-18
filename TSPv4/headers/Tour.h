@@ -22,6 +22,7 @@ public:
     vector<City>& getRoute();
     double getFitness();
     void swap(const int,const int);
+    int findCity(City&);
 private:
     vector<City> route;
     double dist{0};

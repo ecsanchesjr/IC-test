@@ -13,10 +13,9 @@ using std::cout;
 using std::endl;
 using std::cin;
 
-
 typedef std::chrono::high_resolution_clock Clock;
 
-const long int LIMIT{500000};
+const long int LIMIT{50000};
 
 
 bool end(Population&);

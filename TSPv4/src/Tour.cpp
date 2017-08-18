@@ -47,3 +47,11 @@ ostream& operator<<(ostream &output,Tour &t){  // Overload de operador para impr
     output<<"Distance: "<<t.dist<<endl;
     return(output);
 }
+
+int Tour::findCity(City &c){
+    for(int i=0; i<route.size(); i++){
+        if(c==route[i])
+            return(i);
+    }
+    return(-1);
+}
