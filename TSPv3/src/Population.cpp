@@ -86,10 +86,8 @@ void Population::crossover(const int a,const int b){
 
 Tour Population::elitism(){
     double maxFit{maxFitness(population)};
-    cout<<"maxFit: "<<maxFit<<endl;
     for(Tour t : (population)){
         if(compareDouble(t.getFitness(),maxFit)){
-            cout<<"t fit: "<<t.getFitness()<<endl;
             return(t);
         }
     }

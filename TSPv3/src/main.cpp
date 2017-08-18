@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 #include "City.h"
 #include "Map.h"
@@ -9,23 +11,20 @@ using std::cout;
 using std::endl;
 using std::cin;
 
-const int LIMIT{50};
+const int LIMIT{500};
 
 bool end(Population&);
 
 int main(){
     int i{0};
 
+    srand(time(NULL));
+
     Map map;
 
     Population *pop = new Population(map);
 
-    Tour t = (*pop).elitism();
-
-    //cout<<t<<endl;
-
-    cout<<compareDouble(1.1943,0.898538)<<endl;
-    /* 
+    
     cout<<"TSP v3"<<endl;
 
     while(!end(*pop)){
@@ -33,13 +32,10 @@ int main(){
         Population *oldPop = pop;
         pop = (*pop).newGeneration();
         delete oldPop;
-        cout<<"pop size: "<<(*pop).getPopulation().size()<<endl;
-        cout<<"Fitness maxima da geracao "<<i<<": "<<maxFitness((*pop).getPopulation())<<endl;
         ++i;
-        cin.get();
     }
- */
-    //cout<<(*pop)<<endl;
+
+    cout<<(*pop)<<endl;
 
     return(0);
 }
@@ -59,7 +55,7 @@ bool end(Population &pop){
         cout<<"Fitness maxima: "<<maxFit<<endl;
         return(true);
     }else if(genWithoutChanges >= LIMIT){
-        cout<<"Populacao sem melhora a "<<genWithoutChanges<<"geracoes!"<<endl;
+        cout<<"Populacao sem melhora a "<<genWithoutChanges<<" geracoes!"<<endl;
         cout<<"Fitness maxima: "<<maxFit<<endl;
         return(true);
     }else{

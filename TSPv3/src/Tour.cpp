@@ -23,6 +23,7 @@ double Tour::getFitness(){
             sum+=distance(i,i+1);
         }
     }
+    dist = sum;
     return((1/sum)*10000);
 }
 
@@ -43,5 +44,6 @@ ostream& operator<<(ostream &output,Tour &t){
         ++i;
     }
     output<<"Fitness: "<<t.getFitness()<<endl;
+    output<<"Distance: "<<t.dist<<endl;
     return(output);
 }

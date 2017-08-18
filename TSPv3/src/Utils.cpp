@@ -1,11 +1,15 @@
 #include "Utils.h"
 
+#include <iomanip>
+using namespace std;
+
 double convertRanges(const int n,const double rand){
     return((rand*n)/RES);
 }
 
 double compareDouble(const double a,const double b,const double delta){
-    return(abs(a-b)<delta);
+    double relativeDelta{((a>b)?a:b)*delta};
+    return(abs(a-b)<relativeDelta);
 }
 
 double maxFitness(vector<Tour> &tours){

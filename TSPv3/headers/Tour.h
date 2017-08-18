@@ -24,6 +24,7 @@ public:
     void swap(const int,const int);
 private:
     vector<City> route;
+    double dist{0};
     double distance(const int,const int);
 };
 
