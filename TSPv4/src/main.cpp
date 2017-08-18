@@ -12,16 +12,16 @@ using std::cout;
 using std::endl;
 using std::cin;
 
-const int LIMIT{50000};
+const long int LIMIT{500000};
 
 bool end(Population&);
 
 int main(){
-    int i{0},mapSize{0},popSize{0};
+    long int i{0},mapSize{0},popSize{0};
     string nome{""};
     srand(time(NULL));
 
-    cout<<"----------------------------TSP v3----------------------------"<<endl;
+    cout<<"----------------------------TSP v4----------------------------"<<endl;
     cout<<"Digite o nome do arquivo .tsp: ";
     cin>>nome;
     cout<<"Digite o tamanho de sua populacao: ";
@@ -63,7 +63,7 @@ int main(){
 }
 
 bool end(Population &pop){
-    static int genWithoutChanges{0};
+    static long int genWithoutChanges{0};
     static double maxFitEver{0.0};
     double maxFit{maxFitness(pop.getPopulation())},minFit{minFitness(pop.getPopulation())};
     if(maxFit>maxFitEver){

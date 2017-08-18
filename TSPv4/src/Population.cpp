@@ -23,12 +23,14 @@ vector<Tour>& Population::getPopulation(){
 Population* Population::newGeneration(){
     Population  *newPop = new Population;
     Tour best = elitism();
-    for(int i=0;i<population.size()-1;i++){
+    Tour best2 = elitism();
+    for(int i=0;i<population.size()-2;i++){
         (*newPop).getPopulation().push_back(roulete());
     }
     newPop->cross();
     newPop->mutate();
     (*newPop).getPopulation().push_back(best);
+    (*newPop).getPopulation().push_back(best2);
     return(newPop);
 }
 
