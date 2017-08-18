@@ -19,8 +19,8 @@ ImportData::ImportData(string nome)
 
 void ImportData::regexManager(string input)
 {
-    regex integer("(\\+|-)?[[:digit:]]+");
-
+    //|[[:digit:]]+?=[\\.]?=[[:digit:]]+ 
+    regex number("[[:digit:]]+");
     regex name("NAME(.*)");
     regex type("TYPE(.*)");
     regex comment("COMMENT(.*)");
@@ -53,9 +53,9 @@ void ImportData::regexManager(string input)
     {
         flag = "node_comment";
     }
-    else if (regex_match(input, integer) && flagaux == "wait for number")
+    else if (regex_match(input, number) && flagaux == "wait for number")
     {
-        flag = "integer";
+        flag = "number";
     }
 }
 
@@ -98,14 +98,14 @@ void ImportData::reader(string flag, string input)
     {
         //cout << input << " is an node_comment! \n";
     }
-    else if (flag == "integer" && flagaux == "wait for number")
+    else if (flag == "number" && flagaux == "wait for number")
     {
         //  cout << "I: " << input;
         myfile >> input;
-        int x = std::stoi(input);
+        double x = std::stod(input);
         //   cout << "\t X: " << input;
         myfile >> input;
-        int y = std::stoi(input);
+        double y = std::stod(input);
         //     cout << "\t Y: " << input << "\n";
         citiescoord.push_back(City(x,y));
     }
