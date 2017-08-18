@@ -43,7 +43,7 @@ int main(){
     cout<<"Primeira populacao: "<<endl;
     cout<<(*pop)<<endl;
     cout<<"Melhor fitness: "<<maxFitness((*pop).getPopulation());
-    cout<<"distancia: "<<1/maxFitness((*pop).getPopulation())<<endl;
+    cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
     
 
     while(!end(*pop)){   // Roda enquanto nenhuma das condições de parada forem atendidas
@@ -56,8 +56,8 @@ int main(){
 
     cout<<(*pop)<<endl;
     cout<<i<<" geracoes depois!"<<endl;
-    cout<<"Fitness maxima: "<<maxFitness((*pop).getPopulation())<<endl
-    cout<<"distancia: "<<1/maxFitness((*pop).getPopulation())<<endl;
+    cout<<"Fitness maxima: "<<maxFitness((*pop).getPopulation())<<endl;
+    cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
 
     return(0);
 }
