@@ -10,6 +10,7 @@ class Map{
 
 public:
     Map(const int=20);
+    Map(vector<City>);
     vector<City> getCityList() const;
 private:
     vector<City> cityList;

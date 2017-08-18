@@ -1,11 +1,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-
+#include <string>
 #include "City.h"
 #include "Map.h"
 #include "Tour.h"
 #include "Population.h"
+#include "ImportData.h"
 
 using std::cout;
 using std::endl;
@@ -17,17 +18,19 @@ bool end(Population&);
 
 int main(){
     int i{0},mapSize{0},popSize{0};
+    string nome{""};
     srand(time(NULL));
 
     cout<<"----------------------------TSP v3----------------------------"<<endl;
-    cout<<"Digite o numero de cidades do mapa: ";
-    cin>>mapSize;
+    cout<<"Digite o nome do arquivo .tsp: ";
+    cin>>nome;
     cout<<"Digite o tamanho de sua populacao: ";
     cin>>popSize;
     cout<<"comecando o algoritmo..."<<endl;
-    
 
-    Map map(mapSize);
+    ImportData dataFile(nome);
+
+    Map map(dataFile.getCitiesCoord());
 
     Population *pop = new Population(map,popSize);
 
