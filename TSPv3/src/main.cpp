@@ -11,21 +11,25 @@ using std::cout;
 using std::endl;
 using std::cin;
 
-const int LIMIT{500};
+const int LIMIT{50000};
 
 bool end(Population&);
 
 int main(){
-    int i{0};
-
+    int i{0},mapSize{0},popSize{0};
     srand(time(NULL));
 
-    Map map;
-
-    Population *pop = new Population(map);
-
+    cout<<"----------------------------TSP v3----------------------------"<<endl;
+    cout<<"Digite o numero de cidades do mapa: ";
+    cin>>mapSize;
+    cout<<"Digite o tamanho de sua populacao: ";
+    cin>>popSize;
+    cout<<"comecando o algoritmo..."<<endl;
     
-    cout<<"TSP v3"<<endl;
+
+    Map map(mapSize);
+
+    Population *pop = new Population(map,popSize);
 
     while(!end(*pop)){
 
@@ -36,6 +40,7 @@ int main(){
     }
 
     cout<<(*pop)<<endl;
+    cout<<i<<" geracoes depois!"<<endl;
 
     return(0);
 }
