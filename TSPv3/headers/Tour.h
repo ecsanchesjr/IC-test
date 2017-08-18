@@ -19,7 +19,7 @@ class Tour{
 
 public:
     Tour(Map&);
-    vector<City> getRoute();
+    vector<City>& getRoute();
     double getFitness();
     void swap(const int,const int);
 private:

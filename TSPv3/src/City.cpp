@@ -27,3 +27,8 @@ ostream& operator<<(ostream &output,const City &c){
     output<<setfill('0')<<"x: "<<setw(3)<<c.getX()<<" y: "<<setw(3)<<c.getY();
     return(output);
 }
+
+const City& City::operator=(const City &c){
+    this->x = c.getX();
+    this->y = c.getY();
+}

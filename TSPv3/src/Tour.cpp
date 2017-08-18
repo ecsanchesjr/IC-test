@@ -10,7 +10,7 @@ Tour::Tour(Map &map){
     }
 }
 
-vector<City> Tour::getRoute(){
+vector<City>& Tour::getRoute(){
     return(route);
 }
 
@@ -23,7 +23,7 @@ double Tour::getFitness(){
             sum+=distance(i,i+1);
         }
     }
-    return(1/sum);
+    return((1/sum)*10000);
 }
 
 void Tour::swap(const int a,const int b){
@@ -42,5 +42,6 @@ ostream& operator<<(ostream &output,Tour &t){
         output<<setfill('0')<<setw(2)<<i<<": "<<c<<endl;
         ++i;
     }
+    output<<"Fitness: "<<t.getFitness()<<endl;
     return(output);
 }

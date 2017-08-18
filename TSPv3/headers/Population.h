@@ -4,8 +4,14 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
 #include "Tour.h"
 #include "Map.h"
+#include "Utils.h"
+
+
+using std::cout;
+using std::endl;
 
 using std::vector;
 using std::ostream;
@@ -18,8 +24,23 @@ class Population{
 
 public:
     Population(Map&,const int=10);
-    vector<Tour> getPopulation();
-private:
+    Population();
+    vector<Tour>& getPopulation();
+
+    Population* newGeneration();
+//private:
     vector<Tour> population;
+    //realiza a mutação em todos os tours
+    void mutate();
+    //realiza o cross em todos os tours
+    void cross();
+    //realiza a mutação no tour especificado
+    void mutation(const int);
+    //realiza o cross nos tours especificados
+    void crossover(const int,const int);
+
+    Tour elitism();
+    
+    Tour roulete();
 };
 #endif

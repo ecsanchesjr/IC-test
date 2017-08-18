@@ -23,7 +23,7 @@ public:
 
     //overload do operador de comparação
     bool operator==(const City &) const;
-    
+    const City& operator=(const City &);
 private:
     double x;
     double y;
