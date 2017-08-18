@@ -42,7 +42,7 @@ int main(){
 
     cout<<"Primeira populacao: "<<endl;
     cout<<(*pop)<<endl;
-    cout<<"Melhor fitness: "<<maxFitness((*pop).getPopulation());
+    cout<<"Melhor fitness: "<<maxFitness((*pop).getPopulation())<<endl;
     cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
     
 
