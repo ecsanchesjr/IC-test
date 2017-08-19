@@ -1,6 +1,7 @@
 #
 #	"src" folder contains the .cpp files
 #	"include" folder contains the .h files
+#	Scroll down for see the otimization options
 #
 #	Makefile configs
 #
@@ -40,7 +41,7 @@ run:
 clean:
 	@echo "Deleting /bin folder..."
 	@echo ""
-	@rm -r $(OUT_PATH)
+	@rm -r $(TARGET) $(TARGET_FAST) $(TARGET_OPT) $(TARGET_TINY)
 
 dist:
 	@echo "build optimized code..."
