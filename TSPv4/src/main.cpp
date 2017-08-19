@@ -3,6 +3,7 @@
 #include <ctime>
 #include <string>
 #include <chrono>
+#include <stdexcept> 
 #include "City.h"
 #include "Map.h"
 #include "Tour.h"
@@ -12,6 +13,8 @@
 using std::cout;
 using std::endl;
 using std::cin;
+using std::stoi;
+using std::invalid_argument;
 
 typedef std::chrono::high_resolution_clock Clock;
 
@@ -19,18 +22,31 @@ const long int LIM_UNCHANGED{5000};
 const long int LIMIT_ALL{50000};
 
 
-bool end(Population&);
+bool end(Population&,long int&);
 
-int main(){
-    long int i{0},mapSize{0},popSize{0};
+int main(int argc, char *argv[]){
+    long int i{0},mapSize{0},popSize{0},endCond{0};
     string nome{""};
     srand(time(NULL));
-
-    cout<<"----------------------------TSP v4----------------------------"<<endl;
-    cout<<"Digite o nome do arquivo .tsp: ";
-    cin>>nome;
-    cout<<"Digite o tamanho de sua populacao: ";
-    cin>>popSize;
+    if(argc == 2 || argc > 3){
+        cout<<"ta de zoas"<<endl;
+        return(0);
+    }else if(argc == 3){
+        try{
+            nome = argv[1];
+            popSize = stoi(argv[2]);
+        }catch(invalid_argument &i_a){
+            cout<<"Numero de cidades invalido! "<<i_a.what()<<endl;
+            return(0);
+        }
+    }else{
+        cout<<"----------------------------TSP v4----------------------------"<<endl;
+        cout<<"Digite o nome do arquivo .tsp: ";
+        cin>>nome;
+        cout<<"Digite o tamanho de sua populacao: ";
+        cin>>popSize;
+    }
+    
     
     auto tInicial=Clock::now();  //startando cronometro
 
@@ -54,17 +70,28 @@ int main(){
     cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
     
 
-    while(!end(*pop)){   // Roda enquanto nenhuma das condições de parada forem atendidas
+    while(!end(*pop,endCond)){   // Roda enquanto nenhuma das condições de parada forem atendidas
 
         Population *oldPop = pop;
         pop = (*pop).newGeneration();
         delete oldPop;
         ++i;
+        if(i%10000==0){
+            cout<<"Geracao: "<<i<<" e rodando..."<<endl;
+        }
     }
 
     auto tFinal=Clock::now();
 
     cout<<(*pop)<<endl;
+    if(endCond==1){
+        cout<<"População convergiu!"<<endl;
+    }else if(endCond==2){
+        cout<<"Fitness inalterada com "<<LIMIT_ALL<<" de gerações!"<<endl;
+    }else if(endCond==10){
+        cout<<"whot"<<endl;
+    }
+
     cout<<i<<" geracoes depois!"<<endl;
     cout<<"Fitness maxima: "<<maxFitness((*pop).getPopulation())<<endl;
     cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
@@ -77,28 +104,7 @@ int main(){
     return(0);
 }
 
-/* bool end(Population &pop){
-    static long int genWithoutChanges{0};
-    static double maxFitEver{0.0};
-    double maxFit{maxFitness(pop.getPopulation())},minFit{minFitness(pop.getPopulation())};
-    if(maxFit>maxFitEver){
-        maxFitEver = maxFit;
-        genWithoutChanges = 0;
-    }else{
-        genWithoutChanges++;
-    }
-    if((maxFit-minFit)<(maxFit*0.05)){   // Amplitude de 5% entre a maior e menor fitness
-        cout<<"Populacao convergiu!"<<endl;
-        return(true);
-    }else if(genWithoutChanges >= LIMIT){  // Gerações sem alteração da melhor fitness
-        cout<<"Populacao sem melhora a "<<genWithoutChanges<<" geracoes!"<<endl;
-        return(true);
-    }else{
-        return(false);
-    }
-} */
-
-bool end(Population &pop){
+bool end(Population &pop,long int &eC){
     static long int genWithoutChanges{0};
     static double maxFitEver{0.0};
     double maxFit{maxFitness(pop.getPopulation())}, minFit{minFitness(pop.getPopulation())};
@@ -107,20 +113,23 @@ bool end(Population &pop){
         maxFitEver = maxFit;
         genWithoutChanges = 0;
         pop.resetMutMult(); // ocorreu alteração, multiplicador volta para o valor padrão
+        cout<<"aumentou a fitness maxima! fitness: "<<maxFitEver<<endl;
     }else{
         genWithoutChanges++;
     }
 
     if((maxFit-minFit) < (maxFit*0.05)){
-        cout<<"População convergiu!"<<endl;
+        eC=1;
         return(true);
     }else if(genWithoutChanges >= LIM_UNCHANGED){
         pop.increaseMutMult();  // vai subir o multiplicador de chance de mutação em 1 (mutação padrão de 2% * multiplicador)
         if(genWithoutChanges >= LIMIT_ALL){
-            cout<<"Fitness inalterada com "<<genWithoutChanges<<" de gerações!"<<endl;
+            eC=2;
             return(true);
         }
+        return(false);
     }else{
+        eC=10;
         return(false);
     }
 }

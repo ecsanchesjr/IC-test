@@ -13,7 +13,7 @@ vector<Tour>& Population::getPopulation(){
 }
 
 void Population::increaseMutMult(){
-    if(!mut_multplier==20)
+    if(!mut_multplier==50)
         mut_multplier++;
 }
 
