@@ -28,7 +28,14 @@ public:
     vector<Tour>& getPopulation();
 
     Population* newGeneration();
+
+    void resetMutMult();
+    void increaseMutMult();
+
 private:
+    const int MUT_PERCENTAGE{2};
+    int mut_multplier{1};
+
     vector<Tour> population;
     //realiza a mutação em todos os tours
     void mutate();

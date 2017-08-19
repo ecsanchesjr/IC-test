@@ -12,6 +12,14 @@ vector<Tour>& Population::getPopulation(){
     return(population);   
 }
 
+void Population::increaseMutMult(){
+    if(!mut_multplier==20)
+        mut_multplier++;
+}
+
+void Population::resetMutMult(){
+    mut_multplier=1;
+}
 /*
     realiza a escolha dos tours que irão para a proxima geração
     reserva o melhor tour para ir para a proxima sem alteração
@@ -53,7 +61,7 @@ void Population::mutation(const int a){
     //realiza n mutações, sendo n o tanto de cidades existentes
     int size{(int)population[0].getRoute().size()};
     for(int i=0;i<size;i++){
-        if(rand()%100<2){
+        if(rand()%100 < (MUT_PERCENTAGE*mut_multplier)){
             population[a].swap(rand()%size,rand()%size);
         }
     }
@@ -140,7 +148,7 @@ void Population::crossoverPMX(const int a, const int b){
     Tour tmp1{population[a]}, tmp2{population[b]};
     int size{(int)population[0].getRoute().size()};
     int index1{rand()%size}, index2{rand()%size};
-    
+
     if(index1 > index2){    
         int tmp{index1};
         index1=index2;
