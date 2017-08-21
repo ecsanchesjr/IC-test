@@ -21,13 +21,13 @@ typedef std::chrono::high_resolution_clock Clock;
 const long int LIM_UNCHANGED{5000};
 const long int LIMIT_ALL{50000};
 
-
+void start();
 bool end(Population&,long int&);
 
+string nome{""};
+int popSize{0};
+
 int main(int argc, char *argv[]){
-    long int i{0},mapSize{0},popSize{0},endCond{0};
-    string nome{""};
-    srand(time(NULL));
     if(argc == 2 || argc > 3){
         cout<<"ta de zoas"<<endl;
         return(0);
@@ -46,62 +46,68 @@ int main(int argc, char *argv[]){
         cout<<"Digite o tamanho de sua populacao: ";
         cin>>popSize;
     }
-    
-    
-    auto tInicial=Clock::now();  //startando cronometro
-
-    cout<<"Comecando o algoritmo ..."<<endl;
-    ImportData dataFile(nome);
-    dataFile.printInfos();
-
-    Map map(dataFile.getCitiesCoord());
-
-    for(City c : map.getCityList()){
-        cout<<c<<endl;
-    }
-
-    cout<<"comecando a processar..."<<endl;
-
-    Population *pop = new Population(map,popSize);
-
-    cout<<"Primeira populacao: "<<endl;
-    cout<<(*pop)<<endl;
-    cout<<"Melhor fitness: "<<maxFitness((*pop).getPopulation())<<endl;
-    cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
-    
-
-    while(!end(*pop,endCond)){   // Roda enquanto nenhuma das condições de parada forem atendidas
-
-        Population *oldPop = pop;
-        pop = (*pop).newGeneration();
-        delete oldPop;
-        ++i;
-        if(i%10000==0){
-            cout<<"Geracao: "<<i<<" e rodando..."<<endl;
-        }
-    }
-
-    auto tFinal=Clock::now();
-
-    cout<<(*pop)<<endl;
-    if(endCond==1){
-        cout<<"População convergiu!"<<endl;
-    }else if(endCond==2){
-        cout<<"Fitness inalterada com "<<LIMIT_ALL<<" de gerações!"<<endl;
-    }else if(endCond==10){
-        cout<<"whot"<<endl;
-    }
-
-    cout<<i<<" geracoes depois!"<<endl;
-    cout<<"Fitness maxima: "<<maxFitness((*pop).getPopulation())<<endl;
-    cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
-
-    cout<<"-----------------------------" << endl;
-
-    cout<<"Tempo de execucao: "<<std::chrono::duration_cast<std::chrono::seconds>(tFinal - tInicial).count()<<" segundos!"<<endl;
-    cout << endl;
-    dataFile.printInfos();
+    start();
     return(0);
+}
+
+void start(){
+    long int i{0},mapSize{0},endCond{0};
+    
+    srand(time(NULL));
+
+    auto tInicial=Clock::now();  //startando cronometro
+    
+        cout<<"Comecando o algoritmo ..."<<endl;
+        ImportData dataFile(nome);
+        dataFile.printInfos();
+    
+        Map map(dataFile.getCitiesCoord());
+    
+        for(City c : map.getCityList()){
+            cout<<c<<endl;
+        }
+    
+        cout<<"comecando a processar..."<<endl;
+    
+        Population *pop = new Population(map,popSize);
+    
+        cout<<"Primeira populacao: "<<endl;
+        cout<<(*pop)<<endl;
+        cout<<"Melhor fitness: "<<maxFitness((*pop).getPopulation())<<endl;
+        cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
+        
+    
+        while(!end(*pop,endCond)){   // Roda enquanto nenhuma das condições de parada forem atendidas
+    
+            Population *oldPop = pop;
+            pop = (*pop).newGeneration();
+            delete oldPop;
+            ++i;
+            if(i%5000==0){
+                cout<<"Geracao: "<<i<<" e rodando..."<<endl;
+            }
+        }
+    
+        auto tFinal=Clock::now();
+    
+        cout<<(*pop)<<endl;
+        if(endCond==1){
+            cout<<"População convergiu!"<<endl;
+        }else if(endCond==2){
+            cout<<"Fitness inalterada com "<<LIMIT_ALL<<" de gerações!"<<endl;
+        }else if(endCond==10){
+            cout<<"whot"<<endl;
+        }
+    
+        cout<<i<<" geracoes depois!"<<endl;
+        cout<<"Fitness maxima: "<<maxFitness((*pop).getPopulation())<<endl;
+        cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
+    
+        cout<<"-----------------------------" << endl;
+    
+        cout<<"Tempo de execucao: "<<std::chrono::duration_cast<std::chrono::seconds>(tFinal - tInicial).count()<<" segundos!"<<endl;
+        cout << endl;
+        dataFile.printInfos();
 }
 
 bool end(Population &pop,long int &eC){
