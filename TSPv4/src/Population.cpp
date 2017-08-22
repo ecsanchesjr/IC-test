@@ -2,7 +2,7 @@
 
 Population::Population(Map &map,const int size){
     for(int i=0;i<size;i++){
-        population.push_back(Tour(map));
+        population.push_back(Tour(map, size));
     }
 }
 

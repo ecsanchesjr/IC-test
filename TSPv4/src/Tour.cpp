@@ -1,11 +1,12 @@
 #include "Tour.h"
 
-Tour::Tour(Map &map){
+Tour::Tour(Map &map, const int popSize){
     Map tmpMap(map.getCityList());
     int size{(int)map.getCityList().size()};
     int indexFirst{rand()%size};
-    int ctrl{0};
-    while(contains(firstPoint,tmpMap.getCityList()[indexFirst])){
+    int ctrl{0}, batata{0};
+    
+    while(contains(firstPoint,tmpMap.getCityList()[indexFirst]) && firstPoint.size() < size){
         indexFirst=rand()%size;
     }
     (route).push_back(eraseAndReturn(tmpMap.getCityList(), indexFirst));

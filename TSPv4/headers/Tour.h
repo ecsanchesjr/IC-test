@@ -20,7 +20,7 @@ class Tour{
     friend ostream& operator<<(ostream&,Tour &);
 
 public:
-    Tour(Map&);
+    Tour(Map&,const int);
     vector<City>& getRoute();
     double getFitness();
     void swap(const int,const int);
