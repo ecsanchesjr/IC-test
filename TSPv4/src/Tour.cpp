@@ -5,8 +5,14 @@ Tour::Tour(Map &map){
     int size{(int)map.getCityList().size()};
     int indexFirst{rand()%size};
     int ctrl{0};
+    while(contains(firstPoint,tmpMap.getCityList()[indexFirst])){
+        indexFirst=rand()%size;
+    }
     (route).push_back(eraseAndReturn(tmpMap.getCityList(), indexFirst));
-    size-=1;
+    size--;
+
+    firstPoint.push_back(route[0]);
+       
     while(size!=0){
         (route).push_back(eraseAndReturn(tmpMap.getCityList(), findLowerDistance(tmpMap.getCityList(), (route)[ctrl])));
         size--;

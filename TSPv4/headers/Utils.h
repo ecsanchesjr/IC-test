@@ -12,6 +12,8 @@ using std::numeric_limits;
 
 const int RES = 10000;
 
+static vector<City> firstPoint;
+
 double convertRanges(const int,const double);
 
 double maxFitness(vector<Tour>&);
