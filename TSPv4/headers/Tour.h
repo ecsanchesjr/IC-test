@@ -7,6 +7,8 @@
 #include <iomanip>
 #include "City.h"
 #include "Map.h"
+class Tour;
+#include "Utils.h"
 
 using std::vector;
 using std::ostream;

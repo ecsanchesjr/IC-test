@@ -22,4 +22,10 @@ double compareDouble(const double,const double,const double = 0.000001);
 
 bool contains(vector<City>&,City&);
 
+double distance(City&,City&);
+
+ City eraseAndReturn(vector<City>&,int);
+
+int findLowerDistance(vector<City>, City);
+
 #endif

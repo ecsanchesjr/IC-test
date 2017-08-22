@@ -9,6 +9,6 @@ Map::Map(const int size){
 
 Map::Map(vector<City> data):cityList(data){}
 
-vector<City> Map::getCityList() const{
+vector<City>& Map::getCityList(){
     return(cityList);
 }

@@ -1,13 +1,17 @@
 #include "Tour.h"
 
-Tour::Tour(Map &map){  // Construtor do Tour
-    int size = map.getCityList().size();
-    for(City c : map.getCityList()){
-        (route).push_back(c);
-    }
-    for(int i = 0;i<size;i++){
-        swap(rand()%size,rand()%size);
-    }
+Tour::Tour(Map &map){
+    Map tmpMap(map.getCityList());
+    int size{(int)map.getCityList().size()};
+    int indexFirst{rand()%size};
+    int ctrl{0};
+    (route).push_back(eraseAndReturn(tmpMap.getCityList(), indexFirst));
+    size-=1;
+    while(size!=0){
+        (route).push_back(eraseAndReturn(tmpMap.getCityList(), findLowerDistance(tmpMap.getCityList(), (route)[ctrl])));
+        size--;
+        ctrl++;
+    }  
 }
 
 vector<City>& Tour::getRoute(){

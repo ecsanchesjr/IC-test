@@ -50,6 +50,8 @@ int main(int argc, char *argv[]){
     return(0);
 }
 
+
+
 void start(){
     long int i{0},mapSize{0},endCond{0};
     
@@ -108,7 +110,7 @@ void start(){
         cout<<"Tempo de execucao: "<<std::chrono::duration_cast<std::chrono::seconds>(tFinal - tInicial).count()<<" segundos!"<<endl;
         cout << endl;
         dataFile.printInfos();
-}
+} 
 
 bool end(Population &pop,long int &eC){
     static long int genWithoutChanges{0};
