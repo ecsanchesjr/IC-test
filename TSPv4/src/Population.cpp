@@ -13,7 +13,7 @@ vector<Tour>& Population::getPopulation(){
 }
 
 void Population::increaseMutMult(){
-    if(!mut_multplier==50)
+    if(!mut_multplier==30)
         mut_multplier++;
 }
 
@@ -62,7 +62,15 @@ void Population::mutation(const int a){
     int size{(int)population[0].getRoute().size()};
     for(int i=0;i<size;i++){
         if(rand()%100 < (MUT_PERCENTAGE*mut_multplier)){
-            population[a].swap(rand()%size,rand()%size);
+            if(mut_multplier>1){
+                Tour tmp = population[a];
+                population[a].swap(rand()%size,rand()%size);
+                if(population[a].getFitness()<tmp.getFitness()){
+                    population[a] = tmp;
+                }
+            }else{
+                population[a].swap(rand()%size,rand()%size);
+            }
         }
     }
 }

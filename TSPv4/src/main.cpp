@@ -92,13 +92,13 @@ void start(){
     
         auto tFinal=Clock::now();
     
-        cout<<(*pop)<<endl;
+        
+        //cout<<(*pop)<<endl;
+        
         if(endCond==1){
             cout<<"População convergiu!"<<endl;
         }else if(endCond==2){
             cout<<"Fitness inalterada com "<<LIMIT_ALL<<" de gerações!"<<endl;
-        }else if(endCond==10){
-            cout<<"whot"<<endl;
         }
     
         cout<<i<<" geracoes depois!"<<endl;
@@ -122,7 +122,7 @@ bool end(Population &pop,long int &eC){
         maxFitEver = maxFit;
         genWithoutChanges = 0;
         pop.resetMutMult(); // ocorreu alteração, multiplicador volta para o valor padrão
-        cout<<"aumentou a fitness maxima! fitness: "<<maxFitEver<<endl;
+        cout<<"aumentou a fitness maxima! fitness: "<<maxFitEver<<" distancia: "<<((1/maxFitEver)*10000)<<endl;
     }else{
         genWithoutChanges++;
     }
@@ -138,7 +138,6 @@ bool end(Population &pop,long int &eC){
         }
         return(false);
     }else{
-        eC=10;
         return(false);
     }
 }
