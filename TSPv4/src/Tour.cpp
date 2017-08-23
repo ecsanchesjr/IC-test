@@ -1,5 +1,6 @@
 #include "Tour.h"
 
+Tour::Tour(){};
 Tour::Tour(Map &map, const int popSize){
     Map tmpMap(map.getCityList());
     int size{(int)map.getCityList().size()};
@@ -51,7 +52,7 @@ double Tour::distance(const int a,const int b){  // Retorno da distancia entre d
 ostream& operator<<(ostream &output,Tour &t){  // Overload de operador para impressão da população
     int i{0};
     for(City c : t.getRoute()){
-        output<<setfill('0')<<setw(2)<<i<<": "<<c<<endl;
+        output<<setfill(' ')<<setw(3)<<i<<": "<<c<<endl;
         ++i;
     }
     output<<"Fitness: "<<t.getFitness()<<endl;

@@ -23,6 +23,19 @@ double maxFitness(vector<Tour> &tours){  // Retorna a maior Fitness da populaç�
     return(max);
 }
 
+int bestFitness(vector<Tour> &tours){
+    double max = -1*numeric_limits<double>::max(),fitness{0.0};
+    int aux;
+    for(int i=0; i<tours.size();i++){
+        fitness = tours[i].getFitness();
+        if(max < fitness){
+            aux = i;
+        }
+    }
+    return(aux);
+}
+
+
 double minFitness(vector<Tour> &tours){  // Retorna a menor Fitness da população
     double min = numeric_limits<double>::max(),fitness{0.0};
     for(Tour t : tours){

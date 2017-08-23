@@ -145,6 +145,8 @@ ostream& operator<<(ostream &output,Population &pop){  // Overload de operador p
 }
 
 
+
+
 // CROS
 
 /*

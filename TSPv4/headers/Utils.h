@@ -18,6 +18,8 @@ double convertRanges(const int,const double);
 
 double maxFitness(vector<Tour>&);
 
+int bestFitness(vector<Tour>&);
+
 double minFitness(vector<Tour>&);
 
 double compareDouble(const double,const double,const double = 0.000001);

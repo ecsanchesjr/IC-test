@@ -5,6 +5,10 @@ ImportData::ImportData(string nome)
     string input;
     cout << "Importando Arquivo \n";
     myfile.open(nome);
+    if(!myfile.is_open()){
+        cout <<"Falha na leitura do arquivo" <<endl;
+        exit(EXIT_FAILURE);
+    }
     myfile >> input;
     regexManager(input);
     while (myfile >> input)
@@ -116,11 +120,22 @@ void ImportData::reader(string flag, string input)
     }
 }
 void ImportData::printInfos(){
-    cout <<"Nome: " << gettspName() <<"\n";
-    cout<< "Tipo: " <<getType()<< "\n";
-    cout<< "Comentário: "<<getcomment()<<"\n";
-    cout<< "Tipo do Vértice: "<< getedge_type()<< "\n";
-    cout<< "Comentário do tipo de node: "<<getnode_comment()<<"\n";
+    cout <<"Nome: " << gettspName() <<endl;
+    cout<< "Tipo: " <<getType()<<endl;
+    cout<< "Comentário: "<<getcomment()<<endl;
+    cout<< "Tipo do Vértice: "<< getedge_type()<<endl;
+    cout<< "Comentário do tipo de node: "<<getnode_comment()<<endl;
+}
+string ImportData::getInfos(){
+    string input;
+    cout << "BATATA";
+    input ="Nome: " + gettspName()+"\n";
+    input=input+"Tipo: " +getType()+"\n";
+    input=input+"Comentário: "+getcomment()+"\n";
+    input=input+"Tipo do Vértice: "+getedge_type()+"\n";
+    input=input+"Comentário do tipo de node: "+getnode_comment()+"\n";
+    cout<< input;
+    return input;
 }
 
 vector<City> ImportData::getCitiesCoord(){

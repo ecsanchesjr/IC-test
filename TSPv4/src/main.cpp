@@ -4,11 +4,13 @@
 #include <string>
 #include <chrono>
 #include <stdexcept> 
+#include <sstream>
 #include "City.h"
 #include "Map.h"
 #include "Tour.h"
 #include "Population.h"
 #include "ImportData.h"
+#include "ExportData.h"
 
 using std::cout;
 using std::endl;
@@ -61,6 +63,7 @@ void start(){
     
         cout<<"Comecando o algoritmo ..."<<endl;
         ImportData dataFile(nome);
+        ExportData writeLog(nome);
         dataFile.printInfos();
     
         Map map(dataFile.getCitiesCoord());
@@ -75,6 +78,17 @@ void start(){
     
         cout<<"Primeira populacao: "<<endl;
         cout<<(*pop)<<endl;
+        std::ostringstream input;
+        input<<dataFile.getInfos()<<endl;
+        writeLog.writeFile(input);
+        input.str("");
+        input.clear();
+        input << "Primeira população:" <<endl;
+        writeLog.writeFile(input);
+        input.str("");
+        input.clear();
+        input << (*pop).getPopulation()[(bestFitness((*pop).getPopulation()))] <<endl;
+        writeLog.writeFile(input);
         cout<<"Melhor fitness: "<<maxFitness((*pop).getPopulation())<<endl;
         cout<<"distancia: "<<(1/maxFitness((*pop).getPopulation())*10000)<<endl;
         
@@ -87,6 +101,11 @@ void start(){
             ++i;
             if(i%5000==0){
                 cout<<"Geracao: "<<i<<" e rodando..."<<endl;
+                input.str("");
+                input.clear();
+                input << "Geração:" <<i<< endl;
+                input << (*pop).getPopulation()[(bestFitness((*pop).getPopulation()))] <<endl;
+                writeLog.writeFile(input);
             }
         } 
     

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
+#include <string>
 #include "Tour.h"
 #include "Map.h"
 #include "Utils.h"
@@ -17,6 +18,7 @@ using std::vector;
 using std::ostream;
 using std::setfill;
 using std::setw;
+using std:: string;
 
 class Population{
 

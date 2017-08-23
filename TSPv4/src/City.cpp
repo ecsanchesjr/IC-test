@@ -30,7 +30,7 @@ bool City::operator==(const City &c) const{  // Overload para comparação de ci
 }
 
 ostream& operator<<(ostream &output,const City &c){  // Overload para impressão da população
-    output<<setfill('0')<<"x: "<<setw(3)<<c.getX()<<" y: "<<setw(3)<<c.getY();
+    output<<setfill(' ')<<"x: "<<setw(6)<<c.getX()<<" y: "<<setw(6)<<c.getY();
     return(output);
 }
 

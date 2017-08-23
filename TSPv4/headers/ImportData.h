@@ -7,6 +7,7 @@
 #include <regex>
 #include <string>
 #include <vector>
+#include <stdlib.h>
 #include "City.h"
 
 using std:: ifstream;
@@ -14,6 +15,7 @@ using std:: string;
 using std:: cout;
 using std:: regex;
 using std:: vector;
+using std:: ostringstream;
 class ImportData{
     public:
         ImportData(string);
@@ -24,6 +26,7 @@ class ImportData{
         string getnode_comment();
         string getcomment();
         void printInfos();
+        string getInfos();
     private:
         string tspName="N/A";
         string type="N/A";
