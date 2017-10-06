@@ -5,8 +5,9 @@ ImportData::ImportData(string nome)
     string input;
     cout << "Importando Arquivo \n";
     myfile.open(nome);
-    if(!myfile.is_open()){
-        cout <<"Falha na leitura do arquivo" <<endl;
+    if (!myfile.is_open())
+    {
+        cout << "Falha na leitura do arquivo" << endl;
         exit(EXIT_FAILURE);
     }
     myfile >> input;
@@ -23,7 +24,7 @@ ImportData::ImportData(string nome)
 
 void ImportData::regexManager(string input)
 {
-    //|[[:digit:]]+?=[\\.]?=[[:digit:]]+ 
+    //|[[:digit:]]+?=[\\.]?=[[:digit:]]+
     regex number("[[:digit:]]+");
     regex name("NAME(.*)");
     regex type("TYPE(.*)");
@@ -31,6 +32,9 @@ void ImportData::regexManager(string input)
     regex dimension("DIMENSION(.*)");
     regex edge_type("EDGE(.*)");
     regex node_comment("NODE(.*)");
+    regex capacity("CAPACITY(.*)");
+    regex demand("DEMAND_SECTION(.*)");
+    regex depot("DEPOT_SECTION(.*)");
     if (regex_match(input, name))
     {
         flag = "name";
@@ -57,15 +61,32 @@ void ImportData::regexManager(string input)
     {
         flag = "node_comment";
     }
-    else if (regex_match(input, number) && flagaux == "wait for number")
+    else if (regex_match(input, number) && (flagaux == "wait for coord" || flagaux == "wait for demand" || flagaux == "wait for depot"))
     {
         flag = "number";
+    }
+    else if (regex_match(input, capacity))
+    {
+        // cout<<"entrou aqui no capacity"<<endl;
+        flag = "capacity";
+    }
+    else if (regex_match(input, demand))
+    {
+        flag = "demand";
+        cout << "DEMAND_SECTION" << endl;
+        flagaux = "wait for demand";
+    }
+    else if (regex_match(input, depot))
+    {
+        flag = "depot";
+        cout << "DEPOT_SECTION" << endl;
+        flagaux = "wait for depot";
     }
 }
 
 bool ImportData::findIgnoredWords(string input)
 {
-    regex ignore(":|NAME(.*)|TYPE(.*)|COMMENT(.*)|DIMENSION(.*)|EDGE(.*)|EOF");
+    regex ignore("-1|:|NAME(.*)|TYPE(.*)|COMMENT(.*)|DIMENSION(.*)|EDGE(.*)|EOF|CAPACITY(.*)|DEMAND_SECTION|DEPOT_SECTION");
     if (regex_match(input, ignore))
     {
         return false;
@@ -78,85 +99,128 @@ void ImportData::reader(string flag, string input)
 {
     if (flag == "name")
     {
-        tspName=input;
-        //cout << input << " is a name! \n";
+        tspName = input;
+        //    cout << input << " is a name! \n";
     }
     else if (flag == "type")
     {
-        type=input;
-        //cout << input << " is a type! \n";
+        type = input;
+        //  cout << input << " is a type! \n";
     }
     else if (flag == "comment")
     {
-        comment+=(input +" ");
+        comment += (input + " ");
         //cout << input << " is a comment! \n";
     }
     else if (flag == "dimension")
     {
         //cout << input << " is a dimension! \n";
-        citiescoord.reserve(std::stoi(input));
-        flagaux = "wait for number";
+        //citiescoord.reserve(std::stoi(input));
+        // flagaux = "wait for coord";
+        dimension = stoi(input);
     }
     else if (flag == "edge_type")
     {
-        edge_type=input;
+        edge_type = input;
         //cout << input << " is an edge_type! \n";
     }
     else if (flag == "node_comment")
     {
-        node_comment=input;
+        node_comment = input;
         //cout << input << " is an node_comment! \n";
     }
-    else if (flag == "number" && flagaux == "wait for number")
+
+    else if (flag == "capacity")
     {
-        //  cout << "I: " << input;
+        //cout<< input<< " is a capacity"<<endl;
+        capacity=stoi(input);
+        flagaux = "wait for coord";
+    }
+    else if (flag == "demand")
+    {
+        // cout<< "starting the reading of the demand section"<<endl;
+        flagaux = "wait for demand";
+    }
+    else if (flag == "depot")
+    {
+        // cout<< "starting the reading of the demand section"<<endl;
+        flagaux = "wait for depot";
+    }
+    else if (flag == "number" && flagaux == "wait for depot")
+    {
+        cout << "I: " << input << endl;
+        myfile >> input;
+    }
+    else if (flag == "number" && flagaux == "wait for demand")
+    {
+        cout << "I: " << input;
+        myfile >> input;
+        double demand = std::stod(input);
+        cout << "\t Demand: " << input << endl;
+    }
+
+    else if (flag == "number" && flagaux == "wait for coord")
+    {
+        cout << "I: " << input;
         myfile >> input;
         double x = std::stod(input);
-        //   cout << "\t X: " << input;
+        cout << "\t X: " << input;
         myfile >> input;
         double y = std::stod(input);
-        //     cout << "\t Y: " << input << "\n";
-        citiescoord.push_back(City(x,y));
+        cout << "\t Y: " << input << "\n";
+        //citiescoord.push_back(City(x,y));
     }
 }
-void ImportData::printInfos(){
-    cout <<"Nome: " << gettspName() <<endl;
-    cout<< "Tipo: " <<getType()<<endl;
-    cout<< "Comentário: "<<getcomment()<<endl;
-    cout<< "Tipo do Vértice: "<< getedge_type()<<endl;
-    cout<< "Comentário do tipo de node: "<<getnode_comment()<<endl;
+void ImportData::printInfos()
+{
+    cout << "Nome: " << gettspName() << endl;
+    cout << "Tipo: " << getType() << endl;
+    cout << "Comentário: " << getcomment() << endl;
+    cout << "Tipo do Vértice: " << getedge_type() << endl;
+    cout << "Dimensão: " << dimension << endl;
+    cout <<"Capacidade: "<< capacity<< endl;
+    cout << "Comentário do tipo de node: " << getnode_comment() << endl;
+
 }
-string ImportData::getInfos(){
+string ImportData::getInfos()
+{
     string input;
-    cout << "BATATA";
-    input ="Nome: " + gettspName()+"\n";
-    input=input+"Tipo: " +getType()+"\n";
-    input=input+"Comentário: "+getcomment()+"\n";
-    input=input+"Tipo do Vértice: "+getedge_type()+"\n";
-    input=input+"Comentário do tipo de node: "+getnode_comment()+"\n";
-    cout<< input;
+    input = "Nome: " + gettspName() + "\n";
+    input = input + "Tipo: " + getType() + "\n";
+    input = input + "Comentário: " + getcomment() + "\n";
+    input = input + "Tipo do Vértice: " + getedge_type() + "\n";
+    input = input + "Comentário do tipo de node: " + getnode_comment() + "\n";
+    cout << input;
     return input;
 }
 
-vector<City> ImportData::getCitiesCoord(){
-    return citiescoord;
-}
-string ImportData::gettspName(){
+//vector<City> ImportData::getCitiesCoord(){
+//  return citiescoord;
+//}
+string ImportData::gettspName()
+{
     return tspName;
 }
-string ImportData::getType(){
+string ImportData::getType()
+{
     return type;
 }
-string ImportData::getedge_type(){
+string ImportData::getedge_type()
+{
     return edge_type;
 }
-string ImportData::getnode_comment(){
+string ImportData::getnode_comment()
+{
     return node_comment;
 }
-string ImportData:: getcomment(){
-    if(comment==""){
+string ImportData::getcomment()
+{
+    if (comment == "")
+    {
         return "N/A";
-    }else{
+    }
+    else
+    {
         return comment;
     }
 }
