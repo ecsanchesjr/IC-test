@@ -14,7 +14,12 @@ using std::vector;
 
 class CityNode{
 public:
-    typedef pair<CityNode*,double> node;    
+    //estamos usando map, podemos usar ele para navegar o grafo
+    //typedef pair<CityNode*,double> node;    
+
+    //deixando o typedef assim então
+    //int seria o ID, usando o id no map, podemos ir direto para o objeto
+    typedef pair<int,double> node;        
 
     CityNode(int, double, double);
 
