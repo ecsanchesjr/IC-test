@@ -21,4 +21,6 @@ map<int, CityNode*> mapTour(Tour&);
 
 void DELETE_MAP_POINTERS();
 
+void printMap(map<int, CityNode*>&);
+
 #endif

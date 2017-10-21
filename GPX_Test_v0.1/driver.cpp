@@ -28,7 +28,7 @@ int main(){
 
     map<int, CityNode*> mapVSF = mapTour(t);
 
-    map<int, CityNode*>::iterator it = mapVSF.begin();
+/*     map<int, CityNode*>::iterator it = mapVSF.begin();
 
     while(it != mapVSF.end()){
         cout << " " << it->first << " | " << it->second->getId() << " " << endl;
@@ -42,7 +42,7 @@ int main(){
         it++;
 
         cout << "-----------------------------------------------------------------------------" << endl;
-    }
+    } */
 
     CityNode *root = mapVSF[1];
     deque<int> nextToVisit;
