@@ -1,9 +1,9 @@
-SOURCES := $(shell find $(SRC_PATH) -type f -name *.$(SRC_TEXT))
+SOURCES := $(shell find *.cpp)
 
 all: build run
 
 build:
-	g++ -std=gnu++14 $(SOURCES)
+	g++ -std=gnu++14 $(SOURCES) -o a.out
 
 run:
 	./a.out
