@@ -3,13 +3,15 @@
 
 #include <map>
 
+#include "CityNode.hpp"
+
 using std::map;
 
 class GPX{
 public:
-    void joinGraphs(map<int, *CityNode>&,map<int, *CityNode>&);
+    void joinGraphs(map<int, CityNode*>,map<int, CityNode*>);
 private:
-    map<int, *CityNode> unionGraph;
+    map<int, CityNode*> unionGraph;
 };
 
 #endif
