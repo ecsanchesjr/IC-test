@@ -44,3 +44,18 @@ map<int, CityNode*> mapTour(Tour& t){  // Mapear o tour para um grafo com ligaç
  
     return(aux);  // retorna o mpaa com os nodes já instanciados e adicionados
 }
+
+void printMap(map<int, CityNode*> &m){
+    for(map<int, CityNode*>::iterator it = m.begin(); it != m.end(); it++){
+        cout << " " << it->first << " | " << it->second->getId() << endl;
+
+        cout << "===============================" << endl;
+
+        for(int i=0; i<2; i++){
+            cout << "Edge: " << i << " : " << m[it->second->getEdges().at(i).first]->getId();
+            cout << " # ";
+            cout << "Distance: " << it->second->getEdges().at(i).second << endl;
+        }
+        cout << "----------------------------------" << endl;
+    }
+}
