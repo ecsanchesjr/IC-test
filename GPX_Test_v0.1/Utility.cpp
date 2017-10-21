@@ -10,8 +10,12 @@ double distance(double x1, double y1, double x2, double y2){
 
 map<int, CityNode*> mapTour(Tour& t){  // Mapear o tour para um grafo com ligações entre os nós
 
-    map<int, CityNode*> aux; // Mapa com as conexões dos nodes
+    if(t.getTour().empty()){
+        exit(0);
+    }
 
+    map<int, CityNode*> aux; // Mapa com as conexões dos nodes
+    double dist = 0;
     vector<City> cities{t.getTour()};
 
     CityNode *prev = new CityNode(cities.at(0).getId(), cities.at(0).getX(), cities.at(0).getY()); // ponto anterior ao atual dentro do for
@@ -23,17 +27,20 @@ map<int, CityNode*> mapTour(Tour& t){  // Mapear o tour para um grafo com ligaç
         CityNode *cn = new CityNode(cities.at(i).getId(), cities.at(i).getX(), cities.at(i).getY()); // gera um node com o segundo elemento
 
         aux.insert(make_pair(cn->getId(), cn) ); // insere o node dentro do mapa
-
-        cn->addEdges(CityNode::node(prev, distance(prev->getX(), prev->getY(), cn->getX(), cn->getY() ) ) ); // adiciona ao node atual as arestas de conexão 
+        dist = distance(prev->getX(), prev->getY(), cn->getX(), cn->getY() ) ;
+        cn->addEdges(CityNode::node(prev->getId(), dist) ); // adiciona ao node atual as arestas de conexão 
         
-        prev->addEdges(CityNode::node(cn, distance(cn->getX(), cn->getY(), prev->getX(), prev->getY() ) ) );  // adiciona ao node anterior o atual como um próx (lista duplamente encadeada)
+        dist = distance(cn->getX(), cn->getY(), prev->getX(), prev->getY() );
+        prev->addEdges(CityNode::node(cn->getId(), dist ) );  // adiciona ao node anterior o atual como um próx (lista duplamente encadeada)
         
         prev = cn; // o anterior recebe o atual para continuar o for
     }
 
-    first->addEdges(CityNode::node(prev, distance(prev->getX(), prev->getY() , first->getX(), first->getY() ) ) ); // o primeiro recebe o atual ao sair do for, completando os ligamentos das arestas
+    dist =  distance(prev->getX(), prev->getY() , first->getX(), first->getY() );
+    first->addEdges(CityNode::node(prev->getId(),dist ) ); // o primeiro recebe o atual ao sair do for, completando os ligamentos das arestas
     
-    prev->addEdges(CityNode::node(first, distance(first->getX(), first->getY(), prev->getX(), prev->getY()) ) );  // o atual recebe o primeiro para completar os ligamentos
+    dist = distance(first->getX(), first->getY(), prev->getX(), prev->getY());
+    prev->addEdges(CityNode::node(first->getId(), dist ) );  // o atual recebe o primeiro para completar os ligamentos
  
     return(aux);  // retorna o mpaa com os nodes já instanciados e adicionados
 }
