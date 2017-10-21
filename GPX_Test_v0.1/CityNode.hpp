@@ -16,13 +16,17 @@ class CityNode{
 public:
     typedef pair<CityNode*,double> node;    
 
-    CityNode(int);
+    CityNode(int, double, double);
 
     int getId() const;
+    double getX() const;
+    double getY() const;
     vector<node>& getEdges();
     bool getAccess() const;
 
     void setId(int);
+    void setX(double);
+    void setY(double);
     void setEdges(vector<node>);
     void setAccess(bool);
 
@@ -31,6 +35,8 @@ public:
 
 private:
     int id;
+    double x;
+    double y;
     vector<node> edges;
     bool access;
 };

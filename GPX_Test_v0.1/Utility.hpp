@@ -13,7 +13,9 @@ using std::map;
 using std::iterator;
 using std::make_pair;
 
-double distance(City&, City&);
+//double distance(City&, City&);
+
+double distance(double, double, double, double);
 
 map<int, CityNode*> mapTour(Tour&); 
 
