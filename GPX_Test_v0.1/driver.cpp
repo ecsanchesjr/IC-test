@@ -9,6 +9,11 @@
 
 using namespace std;
 
+//tour -> map com o grafo
+//unir os maps
+//tirar as arestas repetidas e colocar o custo para 0
+//encontrar as partiçṍes
+
 int main(){
     vector<City> cities;
 
@@ -45,24 +50,18 @@ int main(){
 
     do{
         idAlreadyVisited.push_back(root->getId());
-        cout<<"id "<<root->getId()<<" colocado no vetor"<<endl;
         for(CityNode::node p :  root->getEdges()){
             if(find(idAlreadyVisited.begin(),idAlreadyVisited.end(),p.first) == idAlreadyVisited.end()
                 && 
             find(nextToVisit.begin(),nextToVisit.end(),p.first) == nextToVisit.end()){
                 nextToVisit.push_back(p.first);
-                cout<<p.first<<" colocado na queue"<<endl;
             }
         }
         if(!nextToVisit.empty()){
-            cout<<nextToVisit.front()<<" top of queue"<<endl;
             root = mapVSF[nextToVisit.front()];
             nextToVisit.pop_front();
         }
         
     }while(!nextToVisit.empty());
 
-    for(int i : idAlreadyVisited){
-        cout<<"id "<<i<<endl;
-    }
 }
