@@ -6,6 +6,8 @@
 #include "Utility.hpp"
 #include "Tour.hpp"
 #include "City.hpp"
+#include "GPX.hpp"
+#include "ListOfCities.hpp"
 
 using namespace std;
 
@@ -15,36 +17,56 @@ using namespace std;
 //encontrar as partiçṍes
 
 int main(){
-    vector<City> cities;
+    vector<City> cities,cities2,vecList;
 
-    cities.push_back(City(1, 0.0, 0.0));
-    cities.push_back(City(2, 0.0, 1.0));
-    cities.push_back(City(3, 1.0, 0.0));
-    cities.push_back(City(4, 1.0, 1.0));
-    cities.push_back(City(6, 2.0, 1.0));
-    cities.push_back(City(5, 2.0, 0.0));
+    vecList.push_back(City(1, 0.0, 3.0));
+    vecList.push_back(City(2, 1.0, 3.0));
+    vecList.push_back(City(3, 0.0, 2.0));
+    vecList.push_back(City(4, 1.0, 2.0));
+    vecList.push_back(City(5, 0.0, 1.0));
+    vecList.push_back(City(6, 1.0, 1.0));
+    vecList.push_back(City(7, 0.0, 0.0));
+    vecList.push_back(City(8, 1.0, 0.0));
+
+    ListOfCities listOfCities(vecList);
+
+    cities.push_back(City(1, 0.0, 3.0));
+    cities.push_back(City(2, 1.0, 3.0));
+    cities.push_back(City(4, 1.0, 2.0));
+    cities.push_back(City(6, 1.0, 1.0));
+    cities.push_back(City(7, 0.0, 0.0));
+    cities.push_back(City(8, 1.0, 0.0));
+    cities.push_back(City(5, 0.0, 1.0));
+    cities.push_back(City(3, 0.0, 2.0));
+
+    cities2.push_back(City(1, 0.0, 3.0));
+    cities2.push_back(City(2, 1.0, 3.0));
+    cities2.push_back(City(3, 0.0, 2.0));
+    cities2.push_back(City(5, 0.0, 1.0));
+    cities2.push_back(City(7, 0.0, 0.0));
+    cities2.push_back(City(8, 1.0, 0.0));
+    cities2.push_back(City(6, 1.0, 1.0));
+    cities2.push_back(City(4, 1.0, 2.0));
 
     Tour t(cities);
+    Tour t2(cities2);
 
-    map<int, CityNode*> mapVSF = mapTour(t);
+    map<int, CityNode*> map1 = mapTour(t), map2 = mapTour(t2);
 
-/*     map<int, CityNode*>::iterator it = mapVSF.begin();
+    GPX objGXP;
 
-    while(it != mapVSF.end()){
-        cout << " " << it->first << " | " << it->second->getId() << " " << endl;
+    objGXP.joinGraphs(map1,map2,vecList);
 
-        cout << "==========================" << endl;
+    printMap(objGXP.unitedGraph);
 
-        for(int i=0; i<2; i++){
-            cout<<"edge "<<i<<": "<<mapVSF[it->second->getEdges().at(i).first]->getId();
-            cout<<" distance: "<<it->second->getEdges().at(i).second<<endl;
-        }
-        it++;
+    cout<<"------------------------------------------------------------------------------------------"<<endl;
 
-        cout << "-----------------------------------------------------------------------------" << endl;
-    } */
+    objGXP.cutCommonEdges();
 
-    CityNode *root = mapVSF[1];
+    printMap(objGXP.unitedGraph);    
+
+    objGXP.deleteMap(objGXP.unitedGraph);
+    /* CityNode *root = mapVSF[1];
     deque<int> nextToVisit;
     vector<int> idAlreadyVisited;
 
@@ -62,6 +84,6 @@ int main(){
             nextToVisit.pop_front();
         }
         
-    }while(!nextToVisit.empty());
+    }while(!nextToVisit.empty()); */
 
 }

@@ -8,6 +8,9 @@ using std::vector;
 
 class ListOfCities{
 public:
+    ListOfCities(vector<City> citiesList):citiesList(citiesList){
+
+    }
     vector<City>& getCitiesList();
 
 private:

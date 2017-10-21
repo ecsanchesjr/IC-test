@@ -3,7 +3,7 @@ SOURCES := $(shell find *.cpp)
 all: build run
 
 build:
-	g++ -std=gnu++14 $(SOURCES) -o a.out
+	g++ -std=gnu++14 $(SOURCES) -o a.out -fsanitize=leak
 
 run:
 	./a.out

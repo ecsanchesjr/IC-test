@@ -1,7 +1,7 @@
 #include "GPX.hpp"
 
-void GPX::joinGraphs(map<int, CityNode*> father1, map<int, CityNode*> father2,Tour t){
-    for(City c : t.getTour()){
+void GPX::joinGraphs(map<int, CityNode*> father1, map<int, CityNode*> father2,ListOfCities t){
+    for(City c : t.getCitiesList()){
         //criar a entrada no map da união
         unitedGraph.insert(make_pair(c.getId(),new CityNode(c.getId(),c.getX(),c.getY())));
         
@@ -15,6 +15,27 @@ void GPX::joinGraphs(map<int, CityNode*> father1, map<int, CityNode*> father2,To
     }
     deleteMap(father1);
     deleteMap(father2);
+}
+
+void GPX::cutCommonEdges(){
+    for(map<int, CityNode*>::iterator it = unitedGraph.begin();it!=unitedGraph.end();it++){
+        vector<CityNode::node> &vec = it->second->getEdges();
+        for(int i=0;i<vec.size();i++){
+            int commonEdges{0};
+            int last{-1};
+            for(int j=0;j<vec.size();j++){
+                if(vec.at(i).first == vec.at(j).first){
+                    commonEdges++;
+                    last = j;
+                    if(commonEdges>1){
+                        vec.at(i).second = 0;
+                        it->second->deleteEdges(last);
+                        it->second->setAccess(true);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void GPX::deleteMap(map<int, CityNode*>  m){
