@@ -1,7 +1,6 @@
 #include "CityNode.hpp"
 
-CityNode::CityNode(int i, Tour tour){//not implemented
-    
+CityNode::CityNode(int id):id(id){
 }
 
 int CityNode::getId() const{return id;}

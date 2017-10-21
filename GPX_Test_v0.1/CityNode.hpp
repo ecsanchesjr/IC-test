@@ -5,6 +5,7 @@
 #include <utility>
 #include <iostream>
 #include "Tour.hpp"
+#include "City.hpp"
 
 using std::cout;
 using std::endl;
@@ -13,9 +14,9 @@ using std::vector;
 
 class CityNode{
 public:
-    typedef pair<CityNode,double> node;    
+    typedef pair<CityNode*,double> node;    
 
-    CityNode(int,Tour);
+    CityNode(int);
 
     int getId() const;
     vector<node>& getEdges();
