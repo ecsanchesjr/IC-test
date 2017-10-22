@@ -26,46 +26,65 @@ int main(){
     vecList.push_back(City(5, 0.0, 1.0));
     vecList.push_back(City(6, 1.0, 1.0));
     vecList.push_back(City(7, 0.0, 0.0));
-    vecList.push_back(City(8, 1.0, 0.0));
+    vecList.push_back(City(8, 1.0, 0.0)); 
+    vecList.push_back(City(9, 1.0, 0.0)); 
+    vecList.push_back(City(10, 1.0, 0.0)); 
+    vecList.push_back(City(11, 1.0, 0.0)); 
+    vecList.push_back(City(12, 1.0, 0.0)); 
+    vecList.push_back(City(13, 1.0, 0.0)); 
+    vecList.push_back(City(14, 1.0, 0.0)); 
 
     ListOfCities listOfCities(vecList);
 
     cities.push_back(City(1, 0.0, 3.0));
-    cities.push_back(City(2, 1.0, 3.0));
     cities.push_back(City(4, 1.0, 2.0));
-    cities.push_back(City(6, 1.0, 1.0));
-    cities.push_back(City(7, 0.0, 0.0));
-    cities.push_back(City(8, 1.0, 0.0));
     cities.push_back(City(5, 0.0, 1.0));
+    cities.push_back(City(2, 1.0, 3.0));
+    cities.push_back(City(6, 1.0, 1.0));
+    cities.push_back(City(8, 1.0, 0.0));
+    cities.push_back(City(12, 0.0, 0.0)); 
+    cities.push_back(City(11, 1.0, 0.0)); 
+    cities.push_back(City(14, 1.0, 0.0)); 
+    cities.push_back(City(13, 1.0, 0.0)); 
+    cities.push_back(City(10, 1.0, 0.0)); 
+    cities.push_back(City(9, 1.0, 0.0)); 
+    cities.push_back(City(7, 1.0, 0.0)); 
     cities.push_back(City(3, 0.0, 2.0));
 
     cities2.push_back(City(1, 0.0, 3.0));
     cities2.push_back(City(2, 1.0, 3.0));
-    cities2.push_back(City(3, 0.0, 2.0));
-    cities2.push_back(City(5, 0.0, 1.0));
-    cities2.push_back(City(7, 0.0, 0.0));
-    cities2.push_back(City(8, 1.0, 0.0));
-    cities2.push_back(City(6, 1.0, 1.0));
-    cities2.push_back(City(4, 1.0, 2.0));
+    cities2.push_back(City(5, 0.0, 2.0));
+    cities2.push_back(City(6, 1.0, 2.0));
+    cities2.push_back(City(8, 0.0, 1.0));
+    cities2.push_back(City(12, 1.0, 1.0));
+    cities2.push_back(City(14, 0.0, 0.0));
+    cities2.push_back(City(11, 1.0, 0.0)); 
+    cities2.push_back(City(10, 1.0, 0.0)); 
+    cities2.push_back(City(13, 1.0, 0.0)); 
+    cities2.push_back(City(9, 1.0, 0.0)); 
+    cities2.push_back(City(7, 1.0, 0.0)); 
+    cities2.push_back(City(3, 1.0, 0.0)); 
 
     Tour t(cities);
     Tour t2(cities2);
 
     map<int, CityNode*> map1 = mapTour(t), map2 = mapTour(t2);
-
+    cout << "EOQ" << endl;
     GPX objGXP;
 
     objGXP.joinGraphs(map1,map2,vecList);
-
+    cout << "EOQ" << endl;
     //printMap(objGXP.unitedGraph);
 
     cout<<"------------------------------------------------------------------------------------------"<<endl;
 
     objGXP.cutCommonEdges();
-
+    cout << "EOQ" << endl;
     printMap(objGXP.unitedGraph);    
+    cout << "EOQ" << endl;
     vector<vector<CityNode>> eoq = objGXP.findPartitions(vecList);
     
+    cout << "EOQ" << endl;
     for(vector<CityNode> vcn : eoq){
         cout << "VETOR " << endl;
         for(CityNode cn : vcn){

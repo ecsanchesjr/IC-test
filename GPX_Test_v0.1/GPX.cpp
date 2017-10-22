@@ -83,7 +83,6 @@ vector<vector<CityNode>> GPX::findPartitions(ListOfCities cities)
         root = unitedGraph[i+1];
         temp.push_back(aux);
         aux.clear();
-
     }
 
     return (temp);
