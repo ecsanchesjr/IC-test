@@ -98,10 +98,10 @@ int main(){
 
     cout << "Partições encontradas" << endl << endl;
 
-    for(vector<int> wat : j){
+    for(vector<int> vi : j){
         cout << "Partição: ";
-        for(int wat1 : wat){
-            cout << wat1 << " " ;
+        for(int i : vi){
+            cout << i << "\t" ;
         }
         cout << endl;
     }

@@ -8,6 +8,7 @@ double distance(double x1, double y1, double x2, double y2){
     return( sqrt( pow((x1-x2),2) + pow((y1-y2),2) ) );
 }
 
+
 map<int, CityNode*> mapTour(Tour& t){  // Mapear o tour para um grafo com ligações entre os nós
 
     if(t.getTour().empty()){
@@ -45,15 +46,16 @@ map<int, CityNode*> mapTour(Tour& t){  // Mapear o tour para um grafo com ligaç
     return(aux);  // retorna o mpaa com os nodes já instanciados e adicionados
 }
 
+
 void printMap(map<int, CityNode*> &m){
     for(map<int, CityNode*>::iterator it = m.begin(); it != m.end(); it++){
         cout << " " << it->first << " | " << it->second->getId() << endl;
         cout<<"Acess: "<<it->second->getAccess()<<endl;
-        cout << "===============================" << endl;
+        cout << "==================================" << endl;
 
         for(int i=0; i<it->second->getEdges().size(); i++){
-            cout << "Edge: " << i << " : " << m[it->second->getEdges().at(i).first]->getId();
-            cout << " # ";
+            cout << "Edge " << i << ": " << m[it->second->getEdges().at(i).first]->getId();
+            cout << "\t#\t";
             cout << "Distance: " << it->second->getEdges().at(i).second << endl;
         }
         cout << "----------------------------------" << endl;
