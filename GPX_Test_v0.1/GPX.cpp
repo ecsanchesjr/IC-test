@@ -59,11 +59,11 @@ vector<vector<CityNode>> GPX::findPartitions(ListOfCities cities)
     vector<CityNode> aux;
     vector<vector<CityNode>> temp;
 
-    for (int i=0; i<cities.getCitiesList().size(); i++)
-    {
+    //for (int i=0; i<cities.getCitiesList().size(); i++)
+    //{
         if(find(aux.begin(), aux.end(), *root) == aux.end()){
             aux.push_back(*root);
-            i++;
+            //i++;
         }
         do
         {
@@ -73,20 +73,37 @@ vector<vector<CityNode>> GPX::findPartitions(ListOfCities cities)
                 if (find(idAlreadyVisited.begin(), idAlreadyVisited.end(), p.first) == idAlreadyVisited.end() && find(nextToVisit.begin(), nextToVisit.end(), p.first) == nextToVisit.end() && p.second != 0)
                 {
                     nextToVisit.push_back(p.first);
+                    cout << "Fisrt " << p.first << endl;
                 }
             }
             if (!nextToVisit.empty())
             {
+                cout << "Tst " << root->getId() <<endl;
                 root = unitedGraph[nextToVisit.front()];
                 aux.push_back(*root);
                 nextToVisit.pop_front();
-                i++;
+                //i++;
             }
         } while (!nextToVisit.empty());
-        root = unitedGraph[i+1];
+        for(int i : idAlreadyVisited){
+            cout << "ID " << i << endl;
+        }
+        for (map<int, CityNode *>::iterator it = unitedGraph.begin(); it != unitedGraph.end(); it++){
+            if(find(idAlreadyVisited.begin(), idAlreadyVisited.end(), it->first) == idAlreadyVisited.end()){
+                cout << "TESTE " << endl;
+                cout << it->first << endl;
+                root = unitedGraph[it->first];
+            }
+        }
         temp.push_back(aux);
+        for (int i : idAlreadyVisited){
+            cout << "IdAlready " << i<<endl;
+        }
+        for(CityNode cn : aux){
+            cout << "CityAux " << cn.getId() << endl;
+        }
         aux.clear();
-    }
+    //}
     return (temp);
 }
 
