@@ -57,15 +57,26 @@ int main(){
 
     objGXP.joinGraphs(map1,map2,vecList);
 
-    printMap(objGXP.unitedGraph);
+    //printMap(objGXP.unitedGraph);
 
     cout<<"------------------------------------------------------------------------------------------"<<endl;
 
     objGXP.cutCommonEdges();
 
     printMap(objGXP.unitedGraph);    
-
+    vector<vector<CityNode>> eoq = objGXP.findPartitions(vecList);
+    
+    for(vector<CityNode> vcn : eoq){
+        cout << "VETOR " << endl;
+        for(CityNode cn : vcn){
+            cout << cn.getId() << endl;
+        }
+    }
+    
     objGXP.deleteMap(objGXP.unitedGraph);
+
+
+
     /* CityNode *root = mapVSF[1];
     deque<int> nextToVisit;
     vector<int> idAlreadyVisited;

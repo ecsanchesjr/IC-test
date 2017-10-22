@@ -57,5 +57,6 @@ void printMap(map<int, CityNode*> &m){
             cout << "Distance: " << it->second->getEdges().at(i).second << endl;
         }
         cout << "----------------------------------" << endl;
+        cout << endl;
     }
 }

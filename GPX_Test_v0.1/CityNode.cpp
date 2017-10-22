@@ -29,3 +29,6 @@ void CityNode::deleteEdges(int i){
         cout<<"ta apagando fora do limite pratinha"<<endl;
     }
 }
+bool CityNode::operator==(const CityNode &c) const{
+    return((c.getId() == this->id) ? true : false);
+}

@@ -38,6 +38,8 @@ public:
     void addEdges(node);
     void deleteEdges(int);
 
+    bool operator==(const CityNode&) const;
+
 private:
     int id;
     double x;
