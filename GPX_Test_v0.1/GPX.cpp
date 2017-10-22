@@ -2,13 +2,10 @@
 
 void GPX::joinGraphs(map<int, CityNode *> father1, map<int, CityNode *> father2, ListOfCities t)
 {
-    cout << "Entrou na Join" << endl;
     for (City c : t.getCitiesList())
     {
-        cout << "Cities " << c.getId() << endl;
         //criar a entrada no map da união
         unitedGraph.insert(make_pair(c.getId(), new CityNode(c.getId(), c.getX(), c.getY())));
-        cout << "Insert antes do for" << endl;
         //colocar as edges no map da união
         for (CityNode::node n : father1[c.getId()]->getEdges())
         {
@@ -18,7 +15,6 @@ void GPX::joinGraphs(map<int, CityNode *> father1, map<int, CityNode *> father2,
         {
             unitedGraph[c.getId()]->addEdges(make_pair(n.first, n.second));
         }
-        cout << "Passou do for" << endl;
     }
     deleteMap(father1);
     deleteMap(father2);
@@ -51,7 +47,8 @@ void GPX::cutCommonEdges()
     }
 }
 
-vector<int> GPX::findPartition(const int nodeOne){
+vector<int> GPX::findPartition(const int nodeOne)
+{
     CityNode *root = unitedGraph[nodeOne];
     vector<int> idAlreadyVisited;
     deque<int> nextToVisit;
@@ -63,78 +60,58 @@ vector<int> GPX::findPartition(const int nodeOne){
     bool cut{false};
 
     nextToVisit.push_back(root->getId());
-    
-    while(!nextToVisit.empty()){
-      
-      	root = unitedGraph[nextToVisit.front()];
+
+    while (!nextToVisit.empty())
+    {
+
+        root = unitedGraph[nextToVisit.front()];
         nextToVisit.pop_front();
-        
+
         partition.push_back(root->getId());
 
         idAlreadyVisited.push_back(root->getId());
 
-        for(CityNode::node n : root->getEdges()){
-            
-            alreadyVisited = find( idAlreadyVisited.begin(), idAlreadyVisited.end(), n.first) == idAlreadyVisited.end();
+        for (CityNode::node n : root->getEdges())
+        {
 
-            toVisit = find( nextToVisit.begin(), nextToVisit.end(), n.first) == nextToVisit.end();
+            alreadyVisited = find(idAlreadyVisited.begin(), idAlreadyVisited.end(), n.first) == idAlreadyVisited.end();
+
+            toVisit = find(nextToVisit.begin(), nextToVisit.end(), n.first) == nextToVisit.end();
 
             cut = n.second != 0;
 
-            if( alreadyVisited && toVisit && cut ){
+            if (alreadyVisited && toVisit && cut)
+            {
                 nextToVisit.push_back(n.first);
             }
         }
     }
-    return(partition);
+    return (partition);
 }
 
+vector<vector<int>> GPX::findAllPartitions(ListOfCities &citiesList)
+{
+    vector<vector<int>> partitions;
+    vector<City> cities = citiesList.getCitiesList();
 
-vector<vector<CityNode>> GPX::findPartitions(ListOfCities cities){
+    while (!cities.empty())
+    {
+        partitions.push_back(findPartition(cities.front().getId()));
 
-    map<int,CityNode*> mapAux = unitedGraph;
-    map<int,CityNode*>::iterator it; 
-    CityNode *root = mapAux[1];
-    deque<int> nextToVisit;
-    vector<int> idAlreadyVisited;
-    vector<CityNode> aux;
-    vector<vector<CityNode>> tmp;
-
-    while(!mapAux.empty()){
-
-        idAlreadyVisited.push_back(root->getId());
-        aux.push_back(*root);
-
-        cout << "root->id " << root->getId() << endl;
-        for(CityNode::node n : root->getEdges()){
-
-            if( find(idAlreadyVisited.begin(), idAlreadyVisited.end(), n.first) == idAlreadyVisited.end() && find(nextToVisit.begin(), nextToVisit.end(), n.first) == nextToVisit.end() && n.second != 0){
-                cout << "first " << n.first << endl;
-                nextToVisit.push_back(n.first);
-            } 
-
-            if( !nextToVisit.empty() ){
-                cout<<"? " << nextToVisit.front() << endl;
-                cout << "NTV front " << mapAux[nextToVisit.front()]->getId() << endl;
-                root = mapAux[nextToVisit.front()];
-                nextToVisit.pop_front();
-
-                aux.push_back(*root);
-
+        for (int i : partitions.back())
+        {
+            for (int j = 0; j < cities.size(); j++)
+            {
+                if (i == cities.at(j).getId())
+                {
+                    cities.erase(cities.begin() + j);
+                }
             }
         }
-
-        tmp.push_back(aux);
-        for(CityNode cn : aux){
-            cout << "Cn->id " << cn.getId() << endl;
-            mapAux.erase(cn.getId());
-        }
-        cout << "Size " << mapAux.size() << endl;
-        aux.clear();
     }
 
-    return(tmp);
-} 
+    return (partitions);
+}
 
 void GPX::deleteMap(map<int, CityNode *> m)
 {

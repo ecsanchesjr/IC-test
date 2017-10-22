@@ -21,7 +21,7 @@ public:
     void joinGraphs(map<int, CityNode*>,map<int, CityNode*>,ListOfCities);
     void cutCommonEdges();
     vector<int> findPartition(const int);
-    vector<vector<CityNode>> findPartitions(ListOfCities);
+    vector<vector<int>> findAllPartitions(ListOfCities&);
 
     void deleteMap(map<int,CityNode*>);
 private:

@@ -94,13 +94,19 @@ int main(){
     }
      */
     
-    vector<int> x = objGXP.findPartition(9);
+    vector<vector<int>> j = objGXP.findAllPartitions(listOfCities);
 
-    cout << "VETOR" << endl;
-    for(int c : x){
-        cout << c << endl;
+    cout << "Partições encontradas" << endl << endl;
+
+    for(vector<int> wat : j){
+        cout << "Partição: ";
+        for(int wat1 : wat){
+            cout << wat1 << " " ;
+        }
+        cout << endl;
     }
-     objGXP.deleteMap(objGXP.unitedGraph);
+
+    objGXP.deleteMap(objGXP.unitedGraph);
 
     /* CityNode *root = mapVSF[1];
     deque<int> nextToVisit;
