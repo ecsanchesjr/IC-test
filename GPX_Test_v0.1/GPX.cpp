@@ -51,61 +51,90 @@ void GPX::cutCommonEdges()
     }
 }
 
-vector<vector<CityNode>> GPX::findPartitions(ListOfCities cities)
-{
-    CityNode *root = unitedGraph[1];
+vector<int> GPX::findPartition(const int nodeOne){
+    CityNode *root = unitedGraph[nodeOne];
+    vector<int> idAlreadyVisited;
+    deque<int> nextToVisit;
+
+    vector<int> partition;
+
+    bool alreadyVisited{false};
+    bool toVisit{false};
+    bool cut{false};
+
+    nextToVisit.push_back(root->getId());
+    
+    while(!nextToVisit.empty()){
+      
+      	root = unitedGraph[nextToVisit.front()];
+        nextToVisit.pop_front();
+        
+        partition.push_back(root->getId());
+
+        idAlreadyVisited.push_back(root->getId());
+
+        for(CityNode::node n : root->getEdges()){
+            
+            alreadyVisited = find( idAlreadyVisited.begin(), idAlreadyVisited.end(), n.first) == idAlreadyVisited.end();
+
+            toVisit = find( nextToVisit.begin(), nextToVisit.end(), n.first) == nextToVisit.end();
+
+            cut = n.second != 0;
+
+            if( alreadyVisited && toVisit && cut ){
+                nextToVisit.push_back(n.first);
+            }
+        }
+    }
+    return(partition);
+}
+
+
+vector<vector<CityNode>> GPX::findPartitions(ListOfCities cities){
+
+    map<int,CityNode*> mapAux = unitedGraph;
+    map<int,CityNode*>::iterator it; 
+    CityNode *root = mapAux[1];
     deque<int> nextToVisit;
     vector<int> idAlreadyVisited;
     vector<CityNode> aux;
-    vector<vector<CityNode>> temp;
+    vector<vector<CityNode>> tmp;
 
-    //for (int i=0; i<cities.getCitiesList().size(); i++)
-    //{
-        if(find(aux.begin(), aux.end(), *root) == aux.end()){
-            aux.push_back(*root);
-            //i++;
-        }
-        do
-        {
-            idAlreadyVisited.push_back(root->getId());
-            for (CityNode::node p : root->getEdges())
-            {
-                if (find(idAlreadyVisited.begin(), idAlreadyVisited.end(), p.first) == idAlreadyVisited.end() && find(nextToVisit.begin(), nextToVisit.end(), p.first) == nextToVisit.end() && p.second != 0)
-                {
-                    nextToVisit.push_back(p.first);
-                    cout << "Fisrt " << p.first << endl;
-                }
-            }
-            if (!nextToVisit.empty())
-            {
-                cout << "Tst " << root->getId() <<endl;
-                root = unitedGraph[nextToVisit.front()];
-                aux.push_back(*root);
+    while(!mapAux.empty()){
+
+        idAlreadyVisited.push_back(root->getId());
+        aux.push_back(*root);
+
+        cout << "root->id " << root->getId() << endl;
+        for(CityNode::node n : root->getEdges()){
+
+            if( find(idAlreadyVisited.begin(), idAlreadyVisited.end(), n.first) == idAlreadyVisited.end() && find(nextToVisit.begin(), nextToVisit.end(), n.first) == nextToVisit.end() && n.second != 0){
+                cout << "first " << n.first << endl;
+                nextToVisit.push_back(n.first);
+            } 
+
+            if( !nextToVisit.empty() ){
+                cout<<"? " << nextToVisit.front() << endl;
+                cout << "NTV front " << mapAux[nextToVisit.front()]->getId() << endl;
+                root = mapAux[nextToVisit.front()];
                 nextToVisit.pop_front();
-                //i++;
-            }
-        } while (!nextToVisit.empty());
-        for(int i : idAlreadyVisited){
-            cout << "ID " << i << endl;
-        }
-        for (map<int, CityNode *>::iterator it = unitedGraph.begin(); it != unitedGraph.end(); it++){
-            if(find(idAlreadyVisited.begin(), idAlreadyVisited.end(), it->first) == idAlreadyVisited.end()){
-                cout << "TESTE " << endl;
-                cout << it->first << endl;
-                root = unitedGraph[it->first];
+
+                aux.push_back(*root);
+
             }
         }
-        temp.push_back(aux);
-        for (int i : idAlreadyVisited){
-            cout << "IdAlready " << i<<endl;
-        }
+
+        tmp.push_back(aux);
         for(CityNode cn : aux){
-            cout << "CityAux " << cn.getId() << endl;
+            cout << "Cn->id " << cn.getId() << endl;
+            mapAux.erase(cn.getId());
         }
+        cout << "Size " << mapAux.size() << endl;
         aux.clear();
-    //}
-    return (temp);
-}
+    }
+
+    return(tmp);
+} 
 
 void GPX::deleteMap(map<int, CityNode *> m)
 {

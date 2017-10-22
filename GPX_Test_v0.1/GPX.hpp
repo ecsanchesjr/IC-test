@@ -20,6 +20,7 @@ public:
     map<int, CityNode*> unitedGraph;
     void joinGraphs(map<int, CityNode*>,map<int, CityNode*>,ListOfCities);
     void cutCommonEdges();
+    vector<int> findPartition(const int);
     vector<vector<CityNode>> findPartitions(ListOfCities);
 
     void deleteMap(map<int,CityNode*>);

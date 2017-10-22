@@ -70,32 +70,37 @@ int main(){
     Tour t2(cities2);
 
     map<int, CityNode*> map1 = mapTour(t), map2 = mapTour(t2);
-    cout << "EOQ" << endl;
+    //cout << "EOQ" << endl;
     GPX objGXP;
 
     objGXP.joinGraphs(map1,map2,vecList);
-    cout << "EOQ" << endl;
+    //cout << "EOQ" << endl;
     //printMap(objGXP.unitedGraph);
 
     cout<<"------------------------------------------------------------------------------------------"<<endl;
 
     objGXP.cutCommonEdges();
-    cout << "EOQ" << endl;
+    //cout << "EOQ" << endl;
     printMap(objGXP.unitedGraph);    
-    cout << "EOQ" << endl;
-    vector<vector<CityNode>> eoq = objGXP.findPartitions(vecList);
+    //cout << "EOQ" << endl;
+    /* vector<vector<CityNode>> eoq = objGXP.findPartitions(vecList);
     
-    cout << "EOQ" << endl;
+    //cout << "EOQ" << endl;
     for(vector<CityNode> vcn : eoq){
         cout << "VETOR " << endl;
         for(CityNode cn : vcn){
             cout << cn.getId() << endl;
         }
     }
+     */
     
-    objGXP.deleteMap(objGXP.unitedGraph);
+    vector<int> x = objGXP.findPartition(9);
 
-
+    cout << "VETOR" << endl;
+    for(int c : x){
+        cout << c << endl;
+    }
+     objGXP.deleteMap(objGXP.unitedGraph);
 
     /* CityNode *root = mapVSF[1];
     deque<int> nextToVisit;
