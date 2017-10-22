@@ -2,11 +2,13 @@
 
 void GPX::joinGraphs(map<int, CityNode *> father1, map<int, CityNode *> father2, ListOfCities t)
 {
+    cout << "Entrou na Join" << endl;
     for (City c : t.getCitiesList())
     {
+        cout << "Cities " << c.getId() << endl;
         //criar a entrada no map da união
         unitedGraph.insert(make_pair(c.getId(), new CityNode(c.getId(), c.getX(), c.getY())));
-
+        cout << "Insert antes do for" << endl;
         //colocar as edges no map da união
         for (CityNode::node n : father1[c.getId()]->getEdges())
         {
@@ -16,6 +18,7 @@ void GPX::joinGraphs(map<int, CityNode *> father1, map<int, CityNode *> father2,
         {
             unitedGraph[c.getId()]->addEdges(make_pair(n.first, n.second));
         }
+        cout << "Passou do for" << endl;
     }
     deleteMap(father1);
     deleteMap(father2);
@@ -84,7 +87,6 @@ vector<vector<CityNode>> GPX::findPartitions(ListOfCities cities)
         temp.push_back(aux);
         aux.clear();
     }
-
     return (temp);
 }
 
