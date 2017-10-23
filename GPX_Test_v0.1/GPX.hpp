@@ -23,6 +23,7 @@ public:
     vector<int> findPartition(const int);
     vector<vector<int>> findAllPartitions(ListOfCities&);
 
+    void checkPartition();
     void deleteMap(map<int,CityNode*>);
 private:
 };
