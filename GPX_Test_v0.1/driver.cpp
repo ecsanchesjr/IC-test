@@ -94,16 +94,10 @@ int main(){
     }
      */
     
-    vector<vector<int>> j = objGXP.findAllPartitions(listOfCities);
+    objGXP.findAllPartitions(listOfCities);
 
-    cout << "Partições encontradas" << endl << endl;
-
-    for(vector<int> vi : j){
-        cout << "Partição: ";
-        for(int i : vi){
-            cout << i << "\t" ;
-        }
-        cout << endl;
+    for(auto &part : objGXP.partitions){
+        cout << part.second << endl;
     }
 
     objGXP.deleteMap(objGXP.unitedGraph);

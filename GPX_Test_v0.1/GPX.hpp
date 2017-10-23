@@ -8,6 +8,7 @@
 
 #include "CityNode.hpp"
 #include "ListOfCities.hpp"
+#include "Partition.hpp"
 
 using std::map;
 using std::make_pair;
@@ -21,10 +22,11 @@ public:
     void joinGraphs(map<int, CityNode*>,map<int, CityNode*>,ListOfCities);
     void cutCommonEdges();
     vector<int> findPartition(const int);
-    vector<vector<int>> findAllPartitions(ListOfCities&);
+    void findAllPartitions(ListOfCities&);
 
-    void checkPartition();
+    void checkPartitions();
     void deleteMap(map<int,CityNode*>);
+    map<int, Partition> partitions;
 private:
 };
 
