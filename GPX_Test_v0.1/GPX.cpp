@@ -1,5 +1,32 @@
 #include "GPX.hpp"
 
+pair<int, vector<int>> GPX::DFS(int id, vector<int> partition, int search)
+{
+
+    int now;
+    vector<int> alreadyVisited;
+    stack<int> nextToVisit;
+    alreadyVisited.push_back(id);
+
+    for (CityNode::node cn : unitedGraph[id]->getEdges()) {
+        if (search == INSIDE) {
+            //pega o nó que está dentro da partição
+            if (find(partition.begin(), partition.end(), cn->getId()) != partition.end()) {
+                nextToVisit.push_back(cn->getId());
+            }
+        } else {
+            //pega o nó que está fora da partição
+            if (find(partition.begin(), partition.end(), cn->getId()) == partition.end()) {
+                nextToVisit.push_back(cn->getId());
+            }
+        }
+    }
+    now = ;
+    while (!nextToVisit.empty()) {
+        alreadyVisited.push_back();
+    }
+}
+
 void GPX::joinGraphs(
     map<int, CityNode*> father1, map<int, CityNode*> father2,
     ListOfCities t)
@@ -114,7 +141,7 @@ void GPX::findAllPartitions(ListOfCities& citiesList)
 { // irá percorrer todo o grafo
     // encotrando as partições
     // presentes nele
-    int id{1};
+    int id{ 1 };
     vector<vector<int>> partitions;
     vector<City> cities = citiesList.getCitiesList();
 
@@ -134,10 +161,10 @@ void GPX::findAllPartitions(ListOfCities& citiesList)
         }
     }
 
-    for (vector<int> vi : partitions){ // retirar partições com tamanho 1
-        if ( vi.size() != 1) {
+    for (vector<int> vi : partitions) { // retirar partições com tamanho 1
+        if (vi.size() != 1) {
             this->partitions.insert(make_pair(id, Partition(id, vi)));
-            id++;            
+            id++;
         }
     }
 }
@@ -157,7 +184,7 @@ void GPX::checkPartitions()
 
         for (auto& mapIt : unitedGraph) {
         }
-    }else{
+    } else {
         partitions.erase(partitions.begin());
     }
 }
