@@ -100,6 +100,8 @@ int main(){
         cout << part.second << endl;
     }
 
+    cout << objGXP.wichPartition(25) << endl;
+
     objGXP.deleteMap(objGXP.unitedGraph);
 
     /* CityNode *root = mapVSF[1];

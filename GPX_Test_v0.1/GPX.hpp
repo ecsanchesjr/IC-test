@@ -36,6 +36,7 @@ public:
 
     void checkPartitions();
     void deleteMap(map<int, CityNode*>);
+    int wichPartition(const int);
     map<int, Partition> partitions;
 
 private:

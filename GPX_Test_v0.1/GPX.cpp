@@ -1,6 +1,6 @@
 #include "GPX.hpp"
 
-pair<int, vector<int>> GPX::DFS(int id, vector<int> partition, int search)
+/* pair<int, vector<int>> GPX::DFS(int id, vector<int> partition, int search)
 {
 
     int now;
@@ -25,7 +25,7 @@ pair<int, vector<int>> GPX::DFS(int id, vector<int> partition, int search)
     while (!nextToVisit.empty()) {
         alreadyVisited.push_back();
     }
-}
+} */
 
 void GPX::joinGraphs(
     map<int, CityNode*> father1, map<int, CityNode*> father2,
@@ -183,8 +183,19 @@ void GPX::checkPartitions()
     if (partitions.size() > 1) {
 
         for (auto& mapIt : unitedGraph) {
+
         }
     } else {
-        partitions.erase(partitions.begin());
+        partitions.clear();
     }
+}
+
+
+int GPX::wichPartition(const int id){   // Procura em qual partição está a cidade procurada, retorna o ID da partição
+    for(auto &p : partitions){
+        if(find( p.second.getNodes().begin(), p.second.getNodes().end(), id ) != p.second.getNodes().end() ){
+            return(p.first);
+        }
+    }
+    return(-1);
 }
