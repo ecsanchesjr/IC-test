@@ -1,31 +1,112 @@
 #include "GPX.hpp"
 
-/* pair<int, vector<int>> GPX::DFS(int id, vector<int> partition, int search)
+int GPX::DFS_inside(int entry, int exit, map<int, CityNode*> father)
 {
-
     int now;
     vector<int> alreadyVisited;
-    stack<int> nextToVisit;
-    alreadyVisited.push_back(id);
+    deque<int> nextToVisit;
+    int entryPartition = whichPartition(entry);
+    vector<int> partition = partitions[entryPartition].getNodes();
+    bool notAlreadyVisited{ false };
+    bool notToVisit{ false };
+    bool notExit{ false };
 
-    for (CityNode::node cn : unitedGraph[id]->getEdges()) {
-        if (search == INSIDE) {
-            //pega o nó que está dentro da partição
-            if (find(partition.begin(), partition.end(), cn->getId()) != partition.end()) {
-                nextToVisit.push_back(cn->getId());
+    alreadyVisited.push_back(entry);
+
+    for (CityNode::node cn : father[entry]->getEdges()) {
+        //pega o nó que está dentro da partição
+        if (find(partition.begin(), partition.end(), cn.first) != partition.end()) {
+            nextToVisit.push_back(cn.first);
+            break;
+        }
+    }
+
+    while (!nextToVisit.empty()) {
+        now = nextToVisit.back();
+        nextToVisit.pop_back();
+        alreadyVisited.push_back(now);
+        vector<CityNode::node> edges = father[now]->getEdges();
+        for (CityNode::node cn : edges) {
+            notAlreadyVisited = (find(alreadyVisited.begin(), alreadyVisited.end(), cn.first) == alreadyVisited.end());
+            notToVisit = (find(nextToVisit.begin(), nextToVisit.end(), cn.first) == nextToVisit.end());
+            notExit = cn.first != exit;
+            if (notAlreadyVisited && notToVisit && notExit) {
+                nextToVisit.push_back(cn.first);
             }
-        } else {
-            //pega o nó que está fora da partição
-            if (find(partition.begin(), partition.end(), cn->getId()) == partition.end()) {
-                nextToVisit.push_back(cn->getId());
+            if(!notExit){
+                alreadyVisited.push_back(cn.first);
             }
         }
     }
-    now = ;
-    while (!nextToVisit.empty()) {
-        alreadyVisited.push_back();
+    /* cout<<"already visited"<<endl;
+    for(int i : alreadyVisited){
+        cout<<i<<" ";
     }
-} */
+    cout<<endl;
+    cout<<"last node visited "<<alreadyVisited.back()<<" exit "<<exit<<endl; */
+    return (alreadyVisited.back() == exit ? IS_CONNECTED : IS_NOT_CONNECTED);
+}
+
+int GPX::DFS_outside(int id)
+{
+    int now;
+    int idPartition = whichPartition(id);
+    vector<int> partition = partitions[idPartition].getNodes();
+    vector<int> alreadyVisited;
+    deque<int> nextToVisit;
+    int partitionConnected{ -1 };
+    bool notAlreadyVisited{ false };
+    bool notToVisit{ false };
+    bool isNotAccess{ false };
+
+    alreadyVisited.push_back(id);
+
+    for (CityNode::node cn : unitedGraph[id]->getEdges()) {
+        //pega o nó que está fora da partição
+        if (find(partition.begin(), partition.end(), cn.first) == partition.end()) {
+            nextToVisit.push_back(cn.first);
+            break;
+        }
+    }
+
+    while (!nextToVisit.empty()) {
+        now = nextToVisit.back();
+        nextToVisit.pop_back();
+        alreadyVisited.push_back(now);
+        vector<CityNode::node> edges = unitedGraph[now]->getEdges();
+        for (CityNode::node cn : edges) {
+            notAlreadyVisited = (find(alreadyVisited.begin(), alreadyVisited.end(), cn.first) == alreadyVisited.end());
+            notToVisit = (find(nextToVisit.begin(), nextToVisit.end(), cn.first) == nextToVisit.end());
+            isNotAccess = unitedGraph[cn.first]->getAccess();
+            if (notAlreadyVisited && notToVisit && isNotAccess) {
+                nextToVisit.push_back(cn.first);
+            }
+            if (!isNotAccess) {
+                alreadyVisited.push_back(cn.first);
+            }
+        }
+    }
+
+    //pegar o id da partition do nó que passou por último
+    partitionConnected = whichPartition(alreadyVisited.back());
+
+    /* //not already in connected list
+    if (find(
+            partitions[idPartition].getConnectedTo().begin(),
+            partitions[idPartition].getConnectedTo().end(),
+            partitionConnected)
+        == partitions[idPartition].getConnectedTo().end()) {
+        partitions[idPartition].getConnectedTo().push_back(partitionConnected);
+    } */
+    //connectado nele mesmo
+    if(idPartition == partitionConnected){
+        return CONNETED_TO_SELF;
+    }else{
+        partitions[idPartition].getConnectedTo().push_back(partitionConnected);
+        return CONNECTED_TO_PARTITION;
+    }
+    
+}
 
 void GPX::joinGraphs(
     map<int, CityNode*> father1, map<int, CityNode*> father2,
@@ -44,9 +125,6 @@ void GPX::joinGraphs(
             unitedGraph[c.getId()]->addEdges(make_pair(n.first, n.second));
         }
     }
-    // deletar pais
-    deleteMap(father1);
-    deleteMap(father2);
 }
 
 void GPX::cutCommonEdges()
@@ -183,19 +261,18 @@ void GPX::checkPartitions()
     if (partitions.size() > 1) {
 
         for (auto& mapIt : unitedGraph) {
-
         }
     } else {
         partitions.clear();
     }
 }
 
-
-int GPX::wichPartition(const int id){   // Procura em qual partição está a cidade procurada, retorna o ID da partição
-    for(auto &p : partitions){
-        if(find( p.second.getNodes().begin(), p.second.getNodes().end(), id ) != p.second.getNodes().end() ){
-            return(p.first);
+int GPX::whichPartition(const int id)
+{ // Procura em qual partição está a cidade procurada, retorna o ID da partição
+    for (auto& p : partitions) {
+        if (find(p.second.getNodes().begin(), p.second.getNodes().end(), id) != p.second.getNodes().end()) {
+            return (p.first);
         }
     }
-    return(-1);
+    return (-1);
 }

@@ -100,7 +100,33 @@ int main(){
         cout << part.second << endl;
     }
 
-    cout << objGXP.wichPartition(25) << endl;
+    /* if(objGXP.DFS_inside(3,6,map1)==GPX::IS_CONNECTED){
+        cout<<"IS_CONNECTED"<<endl;
+    }else{
+        cout<<"IS_NOT_CONNECTED"<<endl;
+    } */
+
+    if(objGXP.DFS_outside(2)==GPX::CONNECTED_TO_PARTITION){
+        cout<<"CONNECTED_TO_PARTITION"<<endl;
+    }else{
+        cout<<"CONNECTED_TO_SELF"<<endl;
+    }
+
+    if(objGXP.DFS_outside(3)==GPX::CONNECTED_TO_PARTITION){
+        cout<<"CONNECTED_TO_PARTITION"<<endl;
+    }else{
+        cout<<"CONNECTED_TO_SELF"<<endl;
+    }
+
+    cout<<"connected to : ";
+    for(int i : objGXP.partitions[objGXP.whichPartition(3)].getConnectedTo()){
+        cout<<i<<" ";
+    }
+    cout<<endl;
+
+    // deletar pais
+    objGXP.deleteMap(map1);
+    objGXP.deleteMap(map2);
 
     objGXP.deleteMap(objGXP.unitedGraph);
 
