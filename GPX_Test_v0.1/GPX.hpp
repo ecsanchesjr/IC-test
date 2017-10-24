@@ -20,7 +20,7 @@ using std::deque;
 class GPX {
 public:
     enum searchResult { CONNECTED_TO_PARTITION,
-        CONNETED_TO_SELF,
+        CONNECTED_TO_SELF,
         IS_CONNECTED,
         IS_NOT_CONNECTED };
 
@@ -32,8 +32,6 @@ public:
 
     int DFS_outside(int);
     int DFS_inside(int,int, map<int, CityNode*>);
-
-    pair<int, vector<int>> DFS(int id, vector<int> partition, int search);
 
     void checkPartitions();
     void deleteMap(map<int, CityNode*>);

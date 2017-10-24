@@ -118,11 +118,28 @@ int main(){
         cout<<"CONNECTED_TO_SELF"<<endl;
     }
 
+    if(objGXP.DFS_outside(6)==GPX::CONNECTED_TO_PARTITION){
+        cout<<"CONNECTED_TO_PARTITION"<<endl;
+    }else{
+        cout<<"CONNECTED_TO_SELF"<<endl;
+    }
+
+    if(objGXP.DFS_inside(3, 6, map1)==GPX::IS_CONNECTED){
+        cout << "IS_CONNECTED" << endl;
+    }else{
+        cout << "IS_NOT_CONNECTED" << endl;
+    }
+
     cout<<"connected to : ";
     for(int i : objGXP.partitions[objGXP.whichPartition(3)].getConnectedTo()){
         cout<<i<<" ";
     }
     cout<<endl;
+
+    cout << endl;
+    for(auto &part : objGXP.partitions){
+        cout << part.second << endl;
+    }
 
     // deletar pais
     objGXP.deleteMap(map1);

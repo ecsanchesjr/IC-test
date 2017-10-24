@@ -22,14 +22,18 @@ int GPX::DFS_inside(int entry, int exit, map<int, CityNode*> father)
     }
 
     while (!nextToVisit.empty()) {
-        now = nextToVisit.back();
+
+        now = nextToVisit.back();        
         nextToVisit.pop_back();
         alreadyVisited.push_back(now);
         vector<CityNode::node> edges = father[now]->getEdges();
+        
         for (CityNode::node cn : edges) {
+            
             notAlreadyVisited = (find(alreadyVisited.begin(), alreadyVisited.end(), cn.first) == alreadyVisited.end());
             notToVisit = (find(nextToVisit.begin(), nextToVisit.end(), cn.first) == nextToVisit.end());
             notExit = cn.first != exit;
+            
             if (notAlreadyVisited && notToVisit && notExit) {
                 nextToVisit.push_back(cn.first);
             }
@@ -100,7 +104,7 @@ int GPX::DFS_outside(int id)
     } */
     //connectado nele mesmo
     if(idPartition == partitionConnected){
-        return CONNETED_TO_SELF;
+        return CONNECTED_TO_SELF;
     }else{
         partitions[idPartition].getConnectedTo().push_back(partitionConnected);
         return CONNECTED_TO_PARTITION;

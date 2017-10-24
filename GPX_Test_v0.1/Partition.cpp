@@ -22,13 +22,13 @@ void Partition::setNodes(vector<int>& nodes){
 }
 
 ostream &operator<<(ostream &output, Partition &partition){
-    output << "Partição " << partition.getId() << endl;
-    output << "Nós: "; 
+    output << "Partition " << partition.getId() << endl;
+    output << "Nodes: "; 
     for(int i : partition.getNodes()){
         output << i << " ";
     }
     output << endl;
-    output << "Conectadas: ";
+    output << "Connected To: ";
     for(int i : partition.getConnectedTo()){
         output << i << " ";
     }
