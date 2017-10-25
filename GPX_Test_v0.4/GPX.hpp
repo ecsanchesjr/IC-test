@@ -6,11 +6,15 @@
 #include <iterator>
 #include <map>
 #include <stack>
+#include <string>
 
 #include "CityNode.hpp"
 #include "ListOfCities.hpp"
 #include "Partition.hpp"
+#include "City.hpp"
 
+using std::string;
+using std::to_string;
 using std::stack;
 using std::map;
 using std::make_pair;
@@ -19,24 +23,35 @@ using std::deque;
 
 class GPX {
 public:
+    typedef map<string, CityNode*> graphMap; 
+
+    //mudar para ponteiro depois
+    typedef map<int, Partition> partitionMap;
+
     enum searchResult { CONNECTED_TO_PARTITION,
         CONNECTED_TO_SELF,
         IS_CONNECTED,
         IS_NOT_CONNECTED };
 
-    map<int, CityNode*> unitedGraph;
-    void joinGraphs(map<int, CityNode*>, map<int, CityNode*>, ListOfCities);
+    
+    void joinGraphs(graphMap, graphMap, ListOfCities);
     void cutCommonEdges();
-    vector<int> findPartition(const int);
-    void findAllPartitions(ListOfCities&);
+    vector<string> findPartition(const string);
+    void findAllPartitions();
 
-    int DFS_outside(int);
-    int DFS_inside(int,int, map<int, CityNode*>);
+    int DFS_outside(string);
+    int DFS_inside(string,string,graphMap);
 
     void checkPartitions();
-    void deleteMap(map<int, CityNode*>);
-    int whichPartition(const int);
-    map<int, Partition> partitions;
+    void deleteMap(graphMap);
+    int whichPartition(const string);
+    
+    partitionMap partitions;
+    graphMap unitedGraph;
+    
+    //precisamos da lista de todas as cidades
+    //até mesmo as com ghosts
+    vector<string> listOfCitiesWithGhosts;
 
 private:
 };

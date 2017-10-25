@@ -3,7 +3,9 @@
 
 #include <vector>
 #include <ostream>
+#include <string>
 
+using std::string;
 using std::vector;
 using std::ostream;
 using std::endl;
@@ -14,19 +16,19 @@ class Partition{
 
 public:
     Partition();
-    Partition(const int, vector<int>&);
+    Partition(const int, vector<string>&);
 
-    vector<int>& getNodes();
-    vector<int>& getConnectedTo();
+    vector<string>& getNodes();
+    //vector<string>& getConnectedTo();
     int getId();
 
     void setId(const int);
-    void setConnectedTo(vector<int>&);
-    void setNodes(vector<int>&);
+    //void setConnectedTo(vector<string>&);
+    void setNodes(vector<string>&);
 private:
     int id;
-    vector<int> nodes;
-    vector<int> connectedTo;
+    vector<string> nodes;
+    //vector<string> connectedTo;
 };
 
 #endif

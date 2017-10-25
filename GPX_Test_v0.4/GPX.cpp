@@ -1,12 +1,12 @@
 #include "GPX.hpp"
 
-int GPX::DFS_inside(int entry, int exit, map<int, CityNode*> father)
+int GPX::DFS_inside(string entry, string exit, graphMap father)
 {
-    int now;
-    vector<int> alreadyVisited;
-    deque<int> nextToVisit;
+    string now;
+    vector<string> alreadyVisited;
+    deque<string> nextToVisit;
     int entryPartition = whichPartition(entry);
-    vector<int> partition = partitions[entryPartition].getNodes();
+    vector<string> partition = partitions[entryPartition].getNodes();
     bool notAlreadyVisited{ false };
     bool notToVisit{ false };
     bool notExit{ false };
@@ -51,13 +51,13 @@ int GPX::DFS_inside(int entry, int exit, map<int, CityNode*> father)
     return (alreadyVisited.back() == exit ? IS_CONNECTED : IS_NOT_CONNECTED);
 }
 
-int GPX::DFS_outside(int id)
+int GPX::DFS_outside(string id)
 {
-    int now;
+    string now;
     int idPartition = whichPartition(id);
-    vector<int> partition = partitions[idPartition].getNodes();
-    vector<int> alreadyVisited;
-    deque<int> nextToVisit;
+    vector<string> partition = partitions[idPartition].getNodes();
+    vector<string> alreadyVisited;
+    deque<string> nextToVisit;
     int partitionConnected{ -1 };
     bool notAlreadyVisited{ false };
     bool notToVisit{ false };
@@ -106,27 +106,27 @@ int GPX::DFS_outside(int id)
     if(idPartition == partitionConnected){
         return CONNECTED_TO_SELF;
     }else{
-        partitions[idPartition].getConnectedTo().push_back(partitionConnected);
+        //partitions[idPartition].getConnectedTo().push_back(partitionConnected);
         return CONNECTED_TO_PARTITION;
     }
     
 }
 
 void GPX::joinGraphs(
-    map<int, CityNode*> father1, map<int, CityNode*> father2,
+    graphMap father1, graphMap father2,
     ListOfCities t)
 { // executa a união dos dois grafos, gerando Gu
     for (City c : t.getCitiesList()) {
         // criar a entrada no map da união
-        unitedGraph.insert(
-            make_pair(c.getId(), new CityNode(c.getId(), c.getX(), c.getY())));
+        unitedGraph.insert( 
+            make_pair(to_string(c.getId()), new CityNode(to_string(c.getId()), c.getX(), c.getY())));
 
         // colocar as edges no map da união
-        for (CityNode::node n : father1[c.getId()]->getEdges()) {
-            unitedGraph[c.getId()]->addEdges(make_pair(n.first, n.second));
+        for (CityNode::node n : father1[to_string(c.getId())]->getEdges()) {
+            unitedGraph[to_string(c.getId())]->addEdge(make_pair(n.first, n.second));
         }
-        for (CityNode::node n : father2[c.getId()]->getEdges()) {
-            unitedGraph[c.getId()]->addEdges(make_pair(n.first, n.second));
+        for (CityNode::node n : father2[to_string(c.getId())]->getEdges()) {
+            unitedGraph[to_string(c.getId())]->addEdge(make_pair(n.first, n.second));
         }
     }
 }
@@ -135,7 +135,7 @@ void GPX::cutCommonEdges()
 { // executa o processo de "cortar" as arestas iguais
     // entre os pais, a partir do grafo da união,
     // gerando o Gu'
-    for (map<int, CityNode*>::iterator it = unitedGraph.begin();
+    for (graphMap::iterator it = unitedGraph.begin();
          it != unitedGraph.end(); it++) { // percorre todas as entradas do Gu
 
         vector<CityNode::node>& vec = it->second->getEdges(); // Carrega o vetor com as arestas contidas
@@ -158,8 +158,8 @@ void GPX::cutCommonEdges()
                         // vértice então executa o corte
 
                         vec.at(i).second = 0; // Distância entre os vértices = 0 para simbolizar o corte
-                        it->second->deleteEdges(
-                            last); // Deleta a primeira instância do vértice
+                        it->second->deleteEdge(
+                            last ); // Deleta a primeira instância do vértice
                         it->second->setAccess(
                             true); // Altera o acesso do vértice (entrada e saída)
                     }
@@ -169,7 +169,7 @@ void GPX::cutCommonEdges()
     }
 }
 
-vector<int> GPX::findPartition(const int nodeOne)
+vector<string> GPX::findPartition(const string nodeOne)
 { // a partir do valor passado
     // irá executar uma busca em
     // Gu' para encontrar as
@@ -179,10 +179,10 @@ vector<int> GPX::findPartition(const int nodeOne)
     // retorna um vetor com os IDs das cidades que compoem a partição
 
     CityNode* root; // nó para verificação
-    vector<int> idAlreadyVisited; // lista dos nós já visitados
-    deque<int> nextToVisit; // lista dos próximos a visitar
+    vector<string> idAlreadyVisited; // lista dos nós já visitados
+    deque<string> nextToVisit; // lista dos próximos a visitar
 
-    vector<int> partition;
+    vector<string> partition;
 
     bool notAlreadyVisited{ false };
     bool notToVisit{ false };
@@ -195,7 +195,7 @@ vector<int> GPX::findPartition(const int nodeOne)
         root = unitedGraph[nextToVisit.front()]; // raiz para execução
 
         nextToVisit.pop_front(); // após "pegar" para execução, limpar o nó da lista
-
+ 
         partition.push_back(root->getId()); // coloca o nó na partição
 
         idAlreadyVisited.push_back(root->getId()); // Nó na lista de "já visitados"
@@ -219,19 +219,19 @@ vector<int> GPX::findPartition(const int nodeOne)
     return (partition); // retornar vetor com IDs da partição
 }
 
-void GPX::findAllPartitions(ListOfCities& citiesList)
+void GPX::findAllPartitions()
 { // irá percorrer todo o grafo
     // encotrando as partições
     // presentes nele
     int id{ 1 };
-    vector<vector<int>> partitions;
-    vector<City> cities = citiesList.getCitiesList();
+    vector<vector<string>> partitions;
+    vector<string> cities = listOfCitiesWithGhosts;
 
     while (!cities.empty()) { // enquanto a lista de cidades ainda existir
 
-        partitions.push_back(findPartition(cities.front().getId())); // insere o retorno da função na lista de partições
+        partitions.push_back(findPartition(cities.front())); // insere o retorno da função na lista de partições
 
-        for (int i : partitions.back()) { // percorre a última partição
+        /* for (string i : partitions.back()) { // percorre a última partição
 
             for (int j = 0; j < cities.size(); j++) { // percorre a lista de cidades
 
@@ -240,10 +240,14 @@ void GPX::findAllPartitions(ListOfCities& citiesList)
                     cities.erase(cities.begin() + j); // apagar a cidade da lista
                 }
             }
+        } */
+
+        for(string i : partitions.back()){
+            cities.erase(remove(cities.begin(),cities.end(),i),cities.end());
         }
     }
 
-    for (vector<int> vi : partitions) { // retirar partições com tamanho 1
+    for (vector<string> vi : partitions) { // retirar partições com tamanho 1
         if (vi.size() != 1) {
             this->partitions.insert(make_pair(id, Partition(id, vi)));
             id++;
@@ -251,11 +255,11 @@ void GPX::findAllPartitions(ListOfCities& citiesList)
     }
 }
 
-void GPX::deleteMap(map<int, CityNode*> m)
+void GPX::deleteMap(graphMap m)
 { // deletar o mapa completamente,
     // desalocando os ponteiros tb
 
-    for (map<int, CityNode*>::iterator it = m.begin(); it != m.end(); it++) {
+    for (graphMap::iterator it = m.begin(); it != m.end(); it++) {
         delete it->second;
     }
 }
@@ -271,7 +275,7 @@ void GPX::checkPartitions()
     }
 }
 
-int GPX::whichPartition(const int id)
+int GPX::whichPartition(const string id)
 { // Procura em qual partição está a cidade procurada, retorna o ID da partição
     for (auto& p : partitions) {
         if (find(p.second.getNodes().begin(), p.second.getNodes().end(), id) != p.second.getNodes().end()) {
