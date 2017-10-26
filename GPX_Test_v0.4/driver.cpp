@@ -69,7 +69,7 @@ int main(){
     Tour t(cities);
     Tour t2(cities2);
 
-    map<int, CityNode*> map1 = mapTour(t), map2 = mapTour(t2);
+    GPX::graphMap map1 = mapTour(t), map2 = mapTour(t2);
     //cout << "EOQ" << endl;
     GPX objGXP;
 
@@ -94,7 +94,10 @@ int main(){
     }
      */
     
-    objGXP.findAllPartitions(listOfCities);
+    for(City c : listOfCities.getCitiesList()){
+        objGXP.listOfCitiesWithGhosts.push_back(std::to_string(c.getId()));
+    }
+    objGXP.findAllPartitions();
 
     for(auto &part : objGXP.partitions){
         cout << part.second << endl;
@@ -106,37 +109,31 @@ int main(){
         cout<<"IS_NOT_CONNECTED"<<endl;
     } */
 
-    if(objGXP.DFS_outside(2)==GPX::CONNECTED_TO_PARTITION){
+    if(objGXP.DFS_outside("2")==GPX::CONNECTED_TO_PARTITION){
         cout<<"CONNECTED_TO_PARTITION"<<endl;
     }else{
         cout<<"CONNECTED_TO_SELF"<<endl;
     }
 
-    if(objGXP.DFS_outside(3)==GPX::CONNECTED_TO_PARTITION){
+    if(objGXP.DFS_outside("3")==GPX::CONNECTED_TO_PARTITION){
         cout<<"CONNECTED_TO_PARTITION"<<endl;
     }else{
         cout<<"CONNECTED_TO_SELF"<<endl;
     }
 
-    if(objGXP.DFS_outside(6)==GPX::CONNECTED_TO_PARTITION){
+    if(objGXP.DFS_outside("6")==GPX::CONNECTED_TO_PARTITION){
         cout<<"CONNECTED_TO_PARTITION"<<endl;
     }else{
         cout<<"CONNECTED_TO_SELF"<<endl;
     }
 
-    if(objGXP.DFS_inside(3, 6, map1)==GPX::IS_CONNECTED){
+    if(objGXP.DFS_inside("3", "6", map1)==GPX::IS_CONNECTED){
         cout << "IS_CONNECTED" << endl;
     }else{
         cout << "IS_NOT_CONNECTED" << endl;
     }
 
-    cout<<"connected to : ";
-    for(int i : objGXP.partitions[objGXP.whichPartition(3)].getConnectedTo()){
-        cout<<i<<" ";
-    }
-    cout<<endl;
 
-    cout << endl;
     for(auto &part : objGXP.partitions){
         cout << part.second << endl;
     }

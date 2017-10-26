@@ -1,11 +1,11 @@
 #include "Partition.hpp"
 
 Partition::Partition(){};
-Partition::Partition(const int id, vector<int>& nodes):id(id), nodes(nodes){};
+Partition::Partition(const int id, vector<string>& nodes):id(id), nodes(nodes){};
 
 
-vector<int>& Partition::getNodes(){ return(nodes); }
-vector<int>& Partition::getConnectedTo(){ return(connectedTo); }
+vector<string>& Partition::getNodes(){ return(nodes); }
+/* vector<string>& Partition::getConnectedTo(){ return(connectedTo); } */
 int Partition::getId(){ return(id); }
 
 
@@ -13,25 +13,25 @@ void Partition::setId(const int id){
     this->id = id;
 }
 
-void Partition::setConnectedTo(vector<int>& connectedTo){
+/* void Partition::setConnectedTo(vector<string>& connectedTo){
     this->connectedTo = connectedTo;
-}
+} */
 
-void Partition::setNodes(vector<int>& nodes){
+void Partition::setNodes(vector<string>& nodes){
     this->nodes = nodes;
 }
 
 ostream &operator<<(ostream &output, Partition &partition){
     output << "Partition " << partition.getId() << endl;
     output << "Nodes: "; 
-    for(int i : partition.getNodes()){
+    for(string i : partition.getNodes()){
         output << i << " ";
     }
     output << endl;
-    output << "Connected To: ";
-    for(int i : partition.getConnectedTo()){
+    /* output << "Connected To: ";
+    for(string i : partition.getConnectedTo()){
         output << i << " ";
-    }
+    } */
     output << endl;
     return(output);
 }

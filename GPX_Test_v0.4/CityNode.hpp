@@ -4,11 +4,16 @@
 #include <vector>
 #include <utility>
 #include <iostream>
+#include <string>
+#include <algorithm>
+
 #include "Tour.hpp"
 #include "City.hpp"
 
+using std::remove;
 using std::cout;
 using std::endl;
+using std::string; 
 using std::pair;
 using std::vector;
 
@@ -19,29 +24,28 @@ public:
 
     //deixando o typedef assim então
     //int seria o ID, usando o id no map, podemos ir direto para o objeto
-    typedef pair<int,double> node;        
+    typedef pair<string,double> node;        
 
-    CityNode(int, double, double);
+    CityNode(string, double, double);
 
-    int getId() const;
+    string getId() const;
     double getX() const;
     double getY() const;
     vector<node>& getEdges();
     bool getAccess() const;
 
-    void setId(int);
+    void setId(string);
     void setX(double);
     void setY(double);
     void setEdges(vector<node>);
     void setAccess(bool);
 
-    void addEdges(node);
-    void deleteEdges(int);
-
+    void addEdge(node);
+    void deleteEdge(int);
     bool operator==(const CityNode&) const;
 
 private:
-    int id;
+    string id;
     double x;
     double y;
     vector<node> edges;
