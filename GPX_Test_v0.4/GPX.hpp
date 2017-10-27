@@ -1,4 +1,4 @@
-#ifndef GPX_H
+/* #ifndef GPX_H
 #define GPX_H
 
 #include <algorithm>
@@ -56,4 +56,4 @@ public:
 private:
 };
 
-#endif
+#endif */

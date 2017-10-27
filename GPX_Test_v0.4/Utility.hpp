@@ -18,12 +18,5 @@ using std::make_pair;
 
 // double distance(City&, City&);
 
-double distance(double, double, double, double);
-
-map<string, CityNode*> mapTour(Tour&);
-
-void DELETE_MAP_POINTERS();
-
-void printMap(map<string, CityNode*>&);
 
 #endif

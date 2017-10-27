@@ -1,4 +1,4 @@
-#include "GPX.hpp"
+/* #include "GPX.hpp"
 
 int GPX::DFS_inside(string entry, string exit, graphMap father)
 {
@@ -47,7 +47,7 @@ int GPX::DFS_inside(string entry, string exit, graphMap father)
         cout<<i<<" ";
     }
     cout<<endl;
-    cout<<"last node visited "<<alreadyVisited.back()<<" exit "<<exit<<endl; */
+    cout<<"last node visited "<<alreadyVisited.back()<<" exit "<<exit<<endl; 
     return (alreadyVisited.back() == exit ? IS_CONNECTED : IS_NOT_CONNECTED);
 }
 
@@ -101,7 +101,7 @@ int GPX::DFS_outside(string id)
             partitionConnected)
         == partitions[idPartition].getConnectedTo().end()) {
         partitions[idPartition].getConnectedTo().push_back(partitionConnected);
-    } */
+    } 
     //connectado nele mesmo
     if(idPartition == partitionConnected){
         return CONNECTED_TO_SELF;
@@ -240,7 +240,7 @@ void GPX::findAllPartitions()
                     cities.erase(cities.begin() + j); // apagar a cidade da lista
                 }
             }
-        } */
+        } 
 
         for(string i : partitions.back()){
             cities.erase(remove(cities.begin(),cities.end(),i),cities.end());
@@ -283,4 +283,4 @@ int GPX::whichPartition(const string id)
         }
     }
     return (-1);
-}
+} */

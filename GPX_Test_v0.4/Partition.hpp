@@ -16,18 +16,21 @@ class Partition{
 
 public:
     Partition();
-    Partition(const int, vector<string>&);
+    Partition(const int, vector<string>,vector<string>);
 
     vector<string>& getNodes();
+    vector<string>& getAccessNodes();
     //vector<string>& getConnectedTo();
     int getId();
 
     void setId(const int);
     //void setConnectedTo(vector<string>&);
     void setNodes(vector<string>&);
+    void setAccessNodes(vector<string>&);
 private:
     int id;
     vector<string> nodes;
+    vector<string> accessNodes;
     //vector<string> connectedTo;
 };
 
