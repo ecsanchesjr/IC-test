@@ -31,7 +31,7 @@ enum searchResult { CONNECTED_TO_PARTITION,
     IS_NOT_CONNECTED };
 
 vector<string> CityToString(vector<City>);
-int DFS_inside(string, string, cityMap, partitionMap);
+int DFS_inside(string, string, cityMap, Partition, vector<string>&);
 int DFS_outside(string, cityMap, partitionMap);
 void joinGraphs(cityMap&, cityMap&, cityMap&);
 void cutCommonEdges(cityMap&);
@@ -42,6 +42,8 @@ cityMap mapToTour(Tour&);
 double distance(double, double, double, double);
 void printMap(cityMap&);
 int whichPartition(const string, partitionMap);
+
+void eraseSubVector(vector<string>&,vector<string>&);
 
 void cleanInsideAccess(cityMap, partitionMap&);
 
@@ -110,12 +112,19 @@ void GPX2(Tour red, Tour blue)
 
     cleanInsideAccess(unitedGraph, allPartitions);
 
-    cout << "ALL PARTITIONS" << endl;
+    cout << "ALL PARTITIONS 1" << endl;
     for (auto& part : allPartitions) {
         cout << part.second << endl;
     }
     cout << "-------------------------------------------------" << endl;
 
+    checkAllPartitions(redMap,blueMap,unitedGraph,allPartitions);
+
+    cout << "ALL PARTITIONS 2" << endl;
+    for (auto& part : allPartitions) {
+        cout << part.second << endl;
+    }
+    cout << "-------------------------------------------------" << endl;
 
     //deletar os mapas
     deleteMap(redMap);
@@ -146,13 +155,12 @@ void cleanInsideAccess(cityMap unitedGraph, partitionMap& allPartitions)
     }
 }
 
-int DFS_inside(string entry, string exit, cityMap father, partitionMap allPartitions)
+int DFS_inside(string entry, string exit, cityMap father, Partition partitionObj,vector<string> &returnVector)
 {
     string now;
     vector<string> alreadyVisited;
     deque<string> nextToVisit;
-    int entryPartition = whichPartition(entry, allPartitions);
-    vector<string> partition = allPartitions[entryPartition].getNodes();
+    vector<string> partition = partitionObj.getNodes();
     bool notAlreadyVisited{ false };
     bool notToVisit{ false };
     bool notExit{ false };
@@ -194,6 +202,7 @@ int DFS_inside(string entry, string exit, cityMap father, partitionMap allPartit
     }
     cout<<endl;
     cout<<"last node visited "<<alreadyVisited.back()<<" exit "<<exit<<endl; */
+    returnVector = alreadyVisited;
     return (alreadyVisited.back() == exit ? IS_CONNECTED : IS_NOT_CONNECTED);
 }
 
@@ -442,18 +451,61 @@ void deleteMap(cityMap& m)
 
 void checkAllPartitions(cityMap red, cityMap blue, cityMap& unitedGraph, partitionMap& allPartitions)
 {
+    //verifica todas as partições
+    for(auto p : allPartitions){
+        //se não for uma partição recombinante ele deleta da lista de partições
+        if(!checkPartition(red,blue,unitedGraph,p.second)){
+            allPartitions.erase(p.first);
+        }
+    }
 }
 
 bool checkPartition(cityMap red, cityMap blue, cityMap& unitedGraph, Partition& partition)
 {
-    if (partition.getAccessNodes().size() % 2 == 0) {
+    unsigned size = partition.getAccessNodes().size();
+    vector<string> redNodes, blueNodes;
+    redNodes = blueNodes  = partition.getNodes();
+    if (!(size % 2 == 0)) {
         //não é uma partição recombinante pois não possui uma entrada para cada saida.
         return (false);
     } else {
         vector<string> nodesInPartition =partition.getNodes();
         bool foundExit {false};
-        string entryCity{""},exitCity{""};
+        pair<string,string> access;
+        for(unsigned i=0;i<size/2;i++){
+            //encontrando entrada e saida no red e verifica se elas existem
+            access.first = partition.getAccessNodes()[0];
+            bool foundConnected{false};
+            for(unsigned j=1;j<size;j++){
+                vector<string> nodesVisited;
+                if(DFS_inside(access.first,partition.getAccessNodes()[j],red,partition,nodesVisited)==IS_CONNECTED){
+                    access.second = partition.getAccessNodes()[j];
+                    foundConnected = true;
+                    eraseSubVector(redNodes,nodesVisited);
 
+                    break;
+                }
+            }
+            if(!foundConnected){
+                return(false);
+            }
+            //verifica no blue se os mesmos pontos de entrada e saida funcionam
+            {
+                vector<string> nodesVisited;
+                if(DFS_inside(access.first,access.second,blue,partition,nodesVisited)==IS_CONNECTED){
+                    eraseSubVector(blueNodes,nodesVisited);
+                }else{
+                    //a entrada e saida encontrada no red não funciona no blue também
+                    return(false);
+                }
+            }
+        }
+        //depois de encontrar todas as entradas e saidas, é necessário verificar se todos os nós da partição foram percorridos pelos dois pais
+        if(redNodes.empty() && blueNodes.empty()){
+            return(true);
+        }else{
+            return(false);
+        }
     }
 }
 
@@ -578,6 +630,18 @@ void printMap(cityMap& m)
 double distance(double x1, double y1, double x2, double y2)
 {
     return (sqrt(pow((x1 - x2), 2) + pow((y1 - y2), 2)));
+}
+
+
+void eraseSubVector(vector<string> &vec,vector<string> &subvec){
+    for(unsigned i=0;i<subvec.size();i++){
+        for(unsigned j=0;vec.size();j++){
+            if(subvec[i].compare(vec[j])==0){
+                vec.erase(vec.begin()+j);
+                break;
+            }
+        }
+    }
 }
 
 #endif
