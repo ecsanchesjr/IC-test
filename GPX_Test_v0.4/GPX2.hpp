@@ -67,27 +67,34 @@ void GPX2(Tour red, Tour blue)
     cityMap redMap = mapToTour(red);
     cityMap blueMap = mapToTour(blue);
 
+    /* cout << "RED MAP" << endl;
+    printMap(redMap);
+    cout << "-------------------------------------------------" << endl;
+    cout << "BLUE MAP" << endl;
+    printMap(blueMap);
+    cout << "-------------------------------------------------" << endl; */
+
+    //merge maps
+    joinGraphs(redMap, blueMap, unitedGraph);
+    /* cout << "UNITED GRAPH" << endl;
+    printMap(unitedGraph);
+    cout << "-------------------------------------------------" << endl; */
+
+    //cut common edges in unitedGraph
+    cutCommonEdges(unitedGraph);
+    /* cout << "CUT GRAPH" << endl;
+    printMap(unitedGraph);
+    cout << "-------------------------------------------------" << endl; */
+
+    //create ghosts vertices
+    createGhosts(redMap,blueMap,unitedGraph);
+
     cout << "RED MAP" << endl;
     printMap(redMap);
     cout << "-------------------------------------------------" << endl;
     cout << "BLUE MAP" << endl;
     printMap(blueMap);
     cout << "-------------------------------------------------" << endl;
-
-    //merge maps
-    joinGraphs(redMap, blueMap, unitedGraph);
-    cout << "UNITED GRAPH" << endl;
-    printMap(unitedGraph);
-    cout << "-------------------------------------------------" << endl;
-
-    //cut common edges in unitedGraph
-    cutCommonEdges(unitedGraph);
-    cout << "CUT GRAPH" << endl;
-    printMap(unitedGraph);
-    cout << "-------------------------------------------------" << endl;
-
-    //create ghosts vertices
-    createGhosts(redMap,blueMap,unitedGraph);
     cout << "AFTER CREATE GHOSTS GRAPH" << endl;
     printMap(unitedGraph);
     cout << "-------------------------------------------------" << endl;
@@ -238,8 +245,13 @@ int DFS_outside(string id, cityMap unitedGraph, partitionMap allPartitions)
             break;
         }
     } */
-
+    /* cout<<"new DFS"<<endl; */
     while (!nextToVisit.empty()) {
+        /* cout<<"nextToVisit ";
+        for(string s : nextToVisit){
+            cout<<s<<" ";
+        }
+        cout<<endl; */
         now = nextToVisit.back();
         nextToVisit.pop_back();
 
@@ -247,13 +259,16 @@ int DFS_outside(string id, cityMap unitedGraph, partitionMap allPartitions)
 
         vector<CityNode::node> edges = unitedGraph[now]->getEdges();
 
+        /* cout<<"now "<<now<<endl; */
+
         for (CityNode::node cn : edges) {
             notAlreadyVisited = (find(alreadyVisited.begin(), alreadyVisited.end(), cn.first) == alreadyVisited.end());
             notToVisit = (find(nextToVisit.begin(), nextToVisit.end(), cn.first) == nextToVisit.end());
             cutEdge = cn.second == 0;
 
             if (notAlreadyVisited && notToVisit && cutEdge) {
-                nextToVisit.push_back(cn.first);
+                /* cout<<"next to visit "<<cn.first<<endl;
+                 */nextToVisit.push_back(cn.first);
             }
         }
     }
@@ -367,6 +382,8 @@ vector<string> findPartition(const string nodeOne, cityMap unitedGraph)
 
         root = unitedGraph[nextToVisit.front()]; // raiz para execução
 
+        cout<<"now id "<<root->getId()<<endl;
+
         nextToVisit.pop_front(); // após "pegar" para execução, limpar o nó da lista
 
         partition.push_back(root->getId()); // coloca o nó na partição
@@ -383,7 +400,7 @@ vector<string> findPartition(const string nodeOne, cityMap unitedGraph)
             notCut = n.second != 0; // verificar se ela não foi cortada
 
             if (notAlreadyVisited && notToVisit && notCut) { // caso todas as condições estejam TRUE
-
+                cout<<"next to visit "<<n.first<<endl;
                 nextToVisit.push_back(
                     n.first); // coloca na lista dos proximos a serem visitados
             }
@@ -523,6 +540,16 @@ void createGhosts(cityMap& red, cityMap& blue, cityMap& unitedGraph){
             double x = city.second->getX(), y = city.second->getY();
 
             CityNode *newNode = new CityNode(ghostID,x,y);
+            for(int i=0;i<red[edges[0].first]->getEdges().size();i++){
+                if(red[edges[0].first]->getEdges()[i].first.compare(city.first)==0){   
+                    cout<<"---------------------------------------------------------------------------------------------------------------"<<endl;
+                    cout<<red[edges[0].first]->getEdges()[i].first<<endl;
+                    cout<<city.first<<endl;
+                    double tmp = red[edges[0].first]->getEdges()[i].second;
+                    red[edges[0].first]->deleteEdge(i);
+                    red[edges[0].first]->addEdge(CityNode::node(ghostID,tmp));
+                }
+            }
             newNode->addEdge(CityNode::node(edges[0].first,edges[0].second));
             newNode->addEdge(CityNode::node(city.first,0));
             newNode->setAccess(true);
@@ -533,6 +560,13 @@ void createGhosts(cityMap& red, cityMap& blue, cityMap& unitedGraph){
             
             edges = blue[city.first]->getEdges();
             newNode = new CityNode(ghostID,x,y);
+            for(int i=0;i<blue[edges[0].first]->getEdges().size();i++){
+                if(blue[edges[0].first]->getEdges()[i].first.compare(city.first)==0){   
+                    double tmp = blue[edges[0].first]->getEdges()[i].second;
+                    blue[edges[0].first]->deleteEdge(i);
+                    blue[edges[0].first]->addEdge(CityNode::node(ghostID,tmp));
+                }
+            }
             newNode->addEdge(CityNode::node(edges[0].first,edges[0].second));
             newNode->addEdge(CityNode::node(city.first,0));
 
