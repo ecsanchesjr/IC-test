@@ -48,7 +48,7 @@ void cleanInsideAccess(cityMap, partitionMap&);
 void checkPartitions(cityMap, cityMap, cityMap&, partitionMap&);
 bool checkPartition(cityMap, cityMap, cityMap&, Partition&);
 
-void createGhosts(cityMap&, cityMap&, cityMap&, vector<string>);
+void createGhosts(cityMap&, cityMap&, cityMap&);
 
 //mudar para Tour depois, quando estiver gerando o resultado do crossover
 void GPX2(Tour red, Tour blue)
@@ -86,6 +86,12 @@ void GPX2(Tour red, Tour blue)
     printMap(unitedGraph);
     cout << "-------------------------------------------------" << endl;
 
+    //create ghosts vertices
+    createGhosts(redMap,blueMap,unitedGraph);
+    cout << "AFTER CREATE GHOSTS GRAPH" << endl;
+    printMap(unitedGraph);
+    cout << "-------------------------------------------------" << endl;
+
     //find partitions on unitedGraph
     findAllPartitions( unitedGraph, allPartitions);
 
@@ -102,6 +108,7 @@ void GPX2(Tour red, Tour blue)
         cout << part.second << endl;
     }
     cout << "-------------------------------------------------" << endl;
+
 
     /* //teste das buscas em profundidade
     if (DFS_outside("2", unitedGraph, allPartitions) == CONNECTED_TO_PARTITION) {
@@ -506,7 +513,7 @@ cityMap mapToTour(Tour& t)
     return (aux); // retorna o mpaa com os nodes já instanciados e adicionados
 }
 
-void createGhosts(cityMap& red, cityMap& blue, cityMap& unitedGraph,vector<string> listOfCitiesWithGhosts, vector<City> cityList){
+void createGhosts(cityMap& red, cityMap& blue, cityMap& unitedGraph){
     for(auto city : unitedGraph){
         //grau 4
         if(city.second->getEdges().size() == 4){
@@ -517,20 +524,29 @@ void createGhosts(cityMap& red, cityMap& blue, cityMap& unitedGraph,vector<strin
 
             CityNode *newNode = new CityNode(ghostID,x,y);
             newNode->addEdge(CityNode::node(edges[0].first,edges[0].second));
+            newNode->addEdge(CityNode::node(city.first,0));
+            newNode->setAccess(true);
             red.insert(make_pair(ghostID,newNode));
-
+            
             red[city.first]->deleteEdge(0);
+            red[city.first]->addEdge(CityNode::node(ghostID,0));
             
             edges = blue[city.first]->getEdges();
             newNode = new CityNode(ghostID,x,y);
             newNode->addEdge(CityNode::node(edges[0].first,edges[0].second));
+            newNode->addEdge(CityNode::node(city.first,0));
 
+            newNode->setAccess(true);
             blue.insert(make_pair(ghostID,newNode));
             
             blue[city.first]->deleteEdge(0);
+            blue[city.first]->addEdge(CityNode::node(ghostID,0));
         }
     }
-
+    deleteMap(unitedGraph);
+    unitedGraph.clear();
+    joinGraphs(red,blue,unitedGraph);
+    cutCommonEdges(unitedGraph);
 }
 
 void printMap(cityMap& m)
