@@ -45,7 +45,7 @@ int whichPartition(const string, partitionMap);
 
 void cleanInsideAccess(cityMap, partitionMap&);
 
-void checkPartitions(cityMap, cityMap, cityMap&, partitionMap&);
+void checkAllPartitions(cityMap, cityMap, cityMap&, partitionMap&);
 bool checkPartition(cityMap, cityMap, cityMap&, Partition&);
 
 void createGhosts(cityMap&, cityMap&, cityMap&);
@@ -116,31 +116,6 @@ void GPX2(Tour red, Tour blue)
     }
     cout << "-------------------------------------------------" << endl;
 
-
-    /* //teste das buscas em profundidade
-    if (DFS_outside("2", unitedGraph, allPartitions) == CONNECTED_TO_PARTITION) {
-        cout << "CONNECTED_TO_PARTITION" << endl;
-    } else {
-        cout << "CONNECTED_TO_SELF" << endl;
-    }
-
-    if (DFS_outside("3", unitedGraph, allPartitions) == CONNECTED_TO_PARTITION) {
-        cout << "CONNECTED_TO_PARTITION" << endl;
-    } else {
-        cout << "CONNECTED_TO_SELF" << endl;
-    }
-
-    if (DFS_outside("6", unitedGraph, allPartitions) == CONNECTED_TO_PARTITION) {
-        cout << "CONNECTED_TO_PARTITION" << endl;
-    } else {
-        cout << "CONNECTED_TO_SELF" << endl;
-    }
-
-    if (DFS_inside("3", "6", redMap,allPartitions) == IS_CONNECTED) {
-        cout << "IS_CONNECTED" << endl;
-    } else {
-        cout << "IS_NOT_CONNECTED" << endl;
-    } */
 
     //deletar os mapas
     deleteMap(redMap);
@@ -465,7 +440,7 @@ void deleteMap(cityMap& m)
     }
 }
 
-void checkPartitions(cityMap red, cityMap blue, cityMap& unitedGraph, partitionMap& allPartitions)
+void checkAllPartitions(cityMap red, cityMap blue, cityMap& unitedGraph, partitionMap& allPartitions)
 {
 }
 
