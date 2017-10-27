@@ -558,25 +558,29 @@ cityMap mapToTour(Tour& t)
 }
 
 void createGhosts(cityMap& red, cityMap& blue, cityMap& unitedGraph){
+    
     for(auto city : unitedGraph){
         //grau 4
         if(city.second->getEdges().size() == 4){
+
             vector<CityNode::node> edges = red[city.first]->getEdges();
-            string ghostID = city.first;
-            ghostID += "-";
+            string ghostID = city.first + "-";
             double x = city.second->getX(), y = city.second->getY();
 
             CityNode *newNode = new CityNode(ghostID,x,y);
-            for(int i=0;i<red[edges[0].first]->getEdges().size();i++){
-                if(red[edges[0].first]->getEdges()[i].first.compare(city.first)==0){   
-                    cout<<"---------------------------------------------------------------------------------------------------------------"<<endl;
-                    cout<<red[edges[0].first]->getEdges()[i].first<<endl;
-                    cout<<city.first<<endl;
-                    double tmp = red[edges[0].first]->getEdges()[i].second;
+            
+            for(int i=0; i < 2; i++){  // just two edges
+                CityNode::node redNode = red[edges[0].first]->getEdges()[i];
+
+                if(redNode.first.compare(city.first)==0){   
+
+                    double tmp = redNode.second;
+
                     red[edges[0].first]->deleteEdge(i);
                     red[edges[0].first]->addEdge(CityNode::node(ghostID,tmp));
                 }
             }
+
             newNode->addEdge(CityNode::node(edges[0].first,edges[0].second));
             newNode->addEdge(CityNode::node(city.first,0));
             newNode->setAccess(true);
@@ -587,13 +591,18 @@ void createGhosts(cityMap& red, cityMap& blue, cityMap& unitedGraph){
             
             edges = blue[city.first]->getEdges();
             newNode = new CityNode(ghostID,x,y);
-            for(int i=0;i<blue[edges[0].first]->getEdges().size();i++){
-                if(blue[edges[0].first]->getEdges()[i].first.compare(city.first)==0){   
-                    double tmp = blue[edges[0].first]->getEdges()[i].second;
+
+            for(int i=0;i < 2;i++){  // just two edges
+                CityNode::node blueNode = blue[edges[0].first]->getEdges()[i];
+
+                if(blueNode.first.compare(city.first)==0){   
+                    double tmp = blueNode.second;
+                    
                     blue[edges[0].first]->deleteEdge(i);
                     blue[edges[0].first]->addEdge(CityNode::node(ghostID,tmp));
                 }
             }
+
             newNode->addEdge(CityNode::node(edges[0].first,edges[0].second));
             newNode->addEdge(CityNode::node(city.first,0));
 
