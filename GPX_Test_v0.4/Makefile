@@ -8,3 +8,7 @@ build:
 
 run:
 	@./a.out > log.txt
+
+clean:
+	rm log.txt
+	rm a.out

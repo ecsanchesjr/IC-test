@@ -38,6 +38,10 @@ void GPX2::crossover(Tour red, Tour blue)
         }
     }
 
+    buildOffspring(test, allPartitions, redMap, blueMap);
+
+    printMap(redMap);
+    
     // Deletar as coisas
     deleteMap(redMap);
     deleteMap(blueMap);
@@ -560,4 +564,22 @@ vector<int> GPX2::choose(cityMap red,cityMap blue,partitionMap allPartitions){
         }
     }
     return partitionsChoosen;
+}
+
+void GPX2::buildOffspring(vector<int>& partitionsChoose, partitionMap& allPartitions, cityMap& red, cityMap& blue){
+    cityMap offspring = red;  // red é o pivo.
+    int index{0};
+
+    for(auto &allP : allPartitions){
+
+        if(partitionsChoose[index] == BLUE){ // se o Blue for melhor que o Red naquela partição
+            for(string s : allP.second.getNodes()){
+                delete red.at(s);
+                red.erase(s);
+
+                red.insert(make_pair(s, blue.at(s)));
+            }
+        }
+        index++;
+    }
 }

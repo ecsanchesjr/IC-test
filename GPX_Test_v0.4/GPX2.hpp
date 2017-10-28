@@ -67,6 +67,9 @@ private:
     // Step 7 - Escolher partições para o filho
     static vector<int> choose(cityMap,cityMap,partitionMap);
 
+    // Step 8 - Irá executar a montagem do mapa do filho
+    static void buildOffspring(vector<int>&, partitionMap&, cityMap&, cityMap&);
+
     // Utilities
     static double distance(double, double, double, double);
     static void printMap(cityMap&);
