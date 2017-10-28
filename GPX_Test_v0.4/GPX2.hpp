@@ -42,7 +42,7 @@ public:
 
 private:
     // Step 1 - Mapear o Tour passado, irá retornar um grafo com as conexões mapeadas
-    static cityMap mapToTour(Tour&);
+    static cityMap tourToMap(Tour&);
 
     // Step 2 - Irá criar os nós GHOSTS e inseri-los nos grafos dos pais
     // executar essa ação antes das outras irá "cortar" gasto computacional repetitivo
@@ -69,6 +69,9 @@ private:
 
     // Step 8 - Irá executar a montagem do mapa do filho
     static void buildOffspring(vector<int>&, partitionMap&, cityMap&, cityMap&);
+
+    // Step 9 - Irá linearizar o mapa do filho para formato Tour
+    static Tour mapToTour(cityMap&);
 
     // Utilities
     static double distance(double, double, double, double);

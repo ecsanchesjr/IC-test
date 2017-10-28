@@ -8,6 +8,7 @@ using std::vector;
 
 class Tour {
 public:
+    Tour();
     Tour(vector<City>);
 
     void setTour(vector<City>);
