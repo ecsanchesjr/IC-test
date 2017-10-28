@@ -1,6 +1,6 @@
 #include "GPX2.hpp"
 
-void GPX2::crossover(Tour red, Tour blue)
+Tour GPX2::crossover(Tour red, Tour blue)
 {
     partitionMap allPartitions;
     cityMap unitedGraph;
@@ -30,13 +30,17 @@ void GPX2::crossover(Tour red, Tour blue)
     
     // Step 8
     buildOffspring(partitionsChoosen, allPartitions, redMap, blueMap);
+    removeGhosts(redMap);
 
-    // Step 9 - ACABAR A MERDA
+    // Step 9 
+    Tour t = mapToTour(redMap);
 
     // Deletar as coisas
     deleteMap(redMap);
     deleteMap(blueMap);
     deleteMap(unitedGraph);
+
+    return t;
 }
 
 vector<string> GPX2::CityToString(vector<City> cityList)
@@ -577,11 +581,12 @@ void GPX2::buildOffspring(vector<int>& partitionsChoose, partitionMap& allPartit
 
 void GPX2::removeGhosts(cityMap &graph){
     for(auto node : graph){
-        unsigned index = node.first.find("-"); 
+        string token{"-"};
+        int index = node.first.find(token);
         if(index!=string::npos){
             //pegar o id do nó sem o token de ghost
             string id = node.first;
-            id.erase(index,node.first.size());
+            id.erase(index,token.size());
 
             //pegar os dois nós que estão ligados ao nó normal e ao ghost
             

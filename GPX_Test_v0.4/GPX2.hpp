@@ -38,7 +38,7 @@ class GPX2 {
 public:
     //mudar para Tour depois, quando estiver gerando o resultado do crossover
     // Método principal do funcionamento do crossover, recebe dois pais e retorna um Tour filho
-    static void crossover(Tour, Tour);
+    static Tour crossover(Tour, Tour);
 
 private:
     // Step 1 - Mapear o Tour passado, irá retornar um grafo com as conexões mapeadas
