@@ -264,17 +264,6 @@ void GPX2::findAllPartitions(cityMap unitedGraph, partitionMap& allPartitions)
 
         partitions.push_back(findPartition(cities.front(), unitedGraph)); // insere o retorno da função na lista de partições
 
-        /* for (string i : partitions.back()) { // percorre a última partição
-
-            for (int j = 0; j < cities.size(); j++) { // percorre a lista de cidades
-
-                if (i == cities.at(j).getId()) { // se a cidade estiver na última partição
-
-                    cities.erase(cities.begin() + j); // apagar a cidade da lista
-                }
-            }
-        } */
-
         for (string i : partitions.back()) {
             cities.erase(remove(cities.begin(), cities.end(), i), cities.end());
         }
