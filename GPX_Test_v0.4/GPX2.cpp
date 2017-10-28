@@ -6,8 +6,8 @@ void GPX2::crossover(Tour red, Tour blue)
     cityMap unitedGraph;
 
     // Step 1
-    cityMap redMap = mapToTour(red);
-    cityMap blueMap = mapToTour(blue);
+    cityMap redMap = tourToMap(red);
+    cityMap blueMap = tourToMap(blue);
 
     // Step 2
     createGhosts(redMap, blueMap);
@@ -407,7 +407,7 @@ int GPX2::whichPartition(const string id, partitionMap allPartitions)
     return (-1);
 }
 
-GPX2::cityMap GPX2::mapToTour(Tour& t)
+GPX2::cityMap GPX2::tourToMap(Tour& t)
 { // Mapear o tour para um grafo com ligações entre os nós
 
     if (t.getTour().empty()) {
@@ -630,4 +630,43 @@ void GPX2::removeGhosts(cityMap &graph){
             graph.erase(node.first);
         }
     }
+
+}
+Tour GPX2::mapToTour(cityMap& mapOffspring){
+    Tour offspring;
+    deque<string> nextToVisit;
+    vector<string> isAlreadyVisited;
+
+    bool notAlreadyVisited{false};
+    bool notToVisit{false};
+
+    CityNode *city = mapOffspring.begin()->second; // Reduzir chamadas (CityNode dentro do map)
+
+    isAlreadyVisited.push_back(mapOffspring.begin()->first);
+
+    offspring.getTour().push_back( City( stoi(city->getId()), city->getX(), city->getY() ) ); // já foi visitado então entra no filho
+
+    nextToVisit.push_back(city->getEdges()[0].first);
+
+    while(nextToVisit.empty()){
+
+        isAlreadyVisited.push_back(nextToVisit.front());
+        city = mapOffspring[nextToVisit.front()];
+        nextToVisit.pop_front();
+
+        offspring.getTour().push_back( City( stoi(city->getId()), city->getX(), city->getY() ) );
+
+        for(CityNode::node n : city->getEdges()){
+
+            notAlreadyVisited = find( isAlreadyVisited.begin(), isAlreadyVisited.end(), n.first ) == isAlreadyVisited.end();
+            notToVisit = find( nextToVisit.begin(), nextToVisit.end(), n.first ) == nextToVisit.end();
+
+            if( notAlreadyVisited && notToVisit ){
+                nextToVisit.push_back(n.first);
+            }
+        }
+
+    }
+
+    return(offspring);
 }
