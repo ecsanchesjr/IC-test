@@ -5,6 +5,7 @@
 #include <deque>
 #include <iterator>
 #include <map>
+#include <set>
 #include <stack>
 #include <string>
 
@@ -20,6 +21,7 @@ using std::map;
 using std::make_pair;
 using std::find;
 using std::deque;
+using std::set;
 
 typedef map<string, CityNode*> cityMap;
 //mudar para ponteiro depois
@@ -43,14 +45,15 @@ double distance(double, double, double, double);
 void printMap(cityMap&);
 int whichPartition(const string, partitionMap);
 
-void eraseSubVector(vector<string>&,vector<string>&);
+void eraseSubVector(vector<string>&, vector<string>&);
 
 void cleanInsideAccess(cityMap, partitionMap&);
 
 void checkAllPartitions(cityMap, cityMap, cityMap&, partitionMap&);
 bool checkPartition(cityMap, cityMap, cityMap&, Partition&);
 
-void createGhosts(cityMap&, cityMap&, cityMap&);
+void createGhosts(cityMap&, cityMap&);
+void insertGhost(string&, cityMap&, CityNode*);
 
 //mudar para Tour depois, quando estiver gerando o resultado do crossover
 void GPX2(Tour red, Tour blue)
@@ -69,12 +72,20 @@ void GPX2(Tour red, Tour blue)
     cityMap redMap = mapToTour(red);
     cityMap blueMap = mapToTour(blue);
 
-    /* cout << "RED MAP" << endl;
+    cout << "RED MAP" << endl;
     printMap(redMap);
     cout << "-------------------------------------------------" << endl;
     cout << "BLUE MAP" << endl;
     printMap(blueMap);
-    cout << "-------------------------------------------------" << endl; */
+    cout << "-------------------------------------------------" << endl;
+
+    createGhosts(redMap, blueMap);
+    cout << "RED MAP" << endl;
+    printMap(redMap);
+    cout << "-------------------------------------------------" << endl;
+    cout << "BLUE MAP" << endl;
+    printMap(blueMap);
+    cout << "-------------------------------------------------" << endl;
 
     //merge maps
     joinGraphs(redMap, blueMap, unitedGraph);
@@ -89,7 +100,7 @@ void GPX2(Tour red, Tour blue)
     cout << "-------------------------------------------------" << endl; */
 
     //create ghosts vertices
-    createGhosts(redMap,blueMap,unitedGraph);
+    //createGhosts(redMap, blueMap);
 
     cout << "RED MAP" << endl;
     printMap(redMap);
@@ -102,7 +113,7 @@ void GPX2(Tour red, Tour blue)
     cout << "-------------------------------------------------" << endl;
 
     //find partitions on unitedGraph
-    findAllPartitions( unitedGraph, allPartitions);
+    findAllPartitions(unitedGraph, allPartitions);
 
     cout << "ALL PARTITIONS" << endl;
     for (auto& part : allPartitions) {
@@ -118,7 +129,7 @@ void GPX2(Tour red, Tour blue)
     }
     cout << "-------------------------------------------------" << endl;
 
-    checkAllPartitions(redMap,blueMap,unitedGraph,allPartitions);
+    checkAllPartitions(redMap, blueMap, unitedGraph, allPartitions);
 
     cout << "ALL PARTITIONS 2" << endl;
     for (auto& part : allPartitions) {
@@ -155,7 +166,7 @@ void cleanInsideAccess(cityMap unitedGraph, partitionMap& allPartitions)
     }
 }
 
-int DFS_inside(string entry, string exit, cityMap father, Partition partitionObj,vector<string> &returnVector)
+int DFS_inside(string entry, string exit, cityMap father, Partition partitionObj, vector<string>& returnVector)
 {
     string now;
     vector<string> alreadyVisited;
@@ -252,7 +263,7 @@ int DFS_outside(string id, cityMap unitedGraph, partitionMap allPartitions)
 
             if (notAlreadyVisited && notToVisit && cutEdge) {
                 /* cout<<"next to visit "<<cn.first<<endl;
-                 */nextToVisit.push_back(cn.first);
+                 */ nextToVisit.push_back(cn.first);
             }
         }
     }
@@ -284,11 +295,11 @@ void joinGraphs(
     cityMap& red, cityMap& blue, cityMap& unitedGraph)
 { // executa a união dos dois grafos, gerando Gu
     vector<string> cityList;
-    for(auto node : red){
+    for (auto node : red) {
         cityList.push_back(node.first);
     }
     for (string id : cityList) {
-        CityNode *c = red[id];
+        CityNode* c = red[id];
         // criar a entrada no map da união
         unitedGraph.insert(
             make_pair((c->getId()), new CityNode((c->getId()), c->getX(), c->getY())));
@@ -366,7 +377,7 @@ vector<string> findPartition(const string nodeOne, cityMap unitedGraph)
 
         root = unitedGraph[nextToVisit.front()]; // raiz para execução
 
-        cout<<"now id "<<root->getId()<<endl;
+        cout << "now id " << root->getId() << endl;
 
         nextToVisit.pop_front(); // após "pegar" para execução, limpar o nó da lista
 
@@ -384,7 +395,7 @@ vector<string> findPartition(const string nodeOne, cityMap unitedGraph)
             notCut = n.second != 0; // verificar se ela não foi cortada
 
             if (notAlreadyVisited && notToVisit && notCut) { // caso todas as condições estejam TRUE
-                cout<<"next to visit "<<n.first<<endl;
+                cout << "next to visit " << n.first << endl;
                 nextToVisit.push_back(
                     n.first); // coloca na lista dos proximos a serem visitados
             }
@@ -402,7 +413,7 @@ void findAllPartitions(cityMap unitedGraph, partitionMap& allPartitions)
     vector<string> cities;
 
     //pegar a lista de todas as cidades
-    for(auto node : unitedGraph){
+    for (auto node : unitedGraph) {
         cities.push_back(node.first);
     }
 
@@ -452,9 +463,9 @@ void deleteMap(cityMap& m)
 void checkAllPartitions(cityMap red, cityMap blue, cityMap& unitedGraph, partitionMap& allPartitions)
 {
     //verifica todas as partições
-    for(auto p : allPartitions){
+    for (auto p : allPartitions) {
         //se não for uma partição recombinante ele deleta da lista de partições
-        if(!checkPartition(red,blue,unitedGraph,p.second)){
+        if (!checkPartition(red, blue, unitedGraph, p.second)) {
             allPartitions.erase(p.first);
         }
     }
@@ -464,47 +475,47 @@ bool checkPartition(cityMap red, cityMap blue, cityMap& unitedGraph, Partition& 
 {
     unsigned size = partition.getAccessNodes().size();
     vector<string> redNodes, blueNodes;
-    redNodes = blueNodes  = partition.getNodes();
+    redNodes = blueNodes = partition.getNodes();
     if (!(size % 2 == 0)) {
         //não é uma partição recombinante pois não possui uma entrada para cada saida.
         return (false);
     } else {
-        vector<string> nodesInPartition =partition.getNodes();
-        bool foundExit {false};
-        pair<string,string> access;
-        for(unsigned i=0;i<size/2;i++){
+        vector<string> nodesInPartition = partition.getNodes();
+        bool foundExit{ false };
+        pair<string, string> access;
+        for (unsigned i = 0; i < size / 2; i++) {
             //encontrando entrada e saida no red e verifica se elas existem
             access.first = partition.getAccessNodes()[0];
-            bool foundConnected{false};
-            for(unsigned j=1;j<size;j++){
+            bool foundConnected{ false };
+            for (unsigned j = 1; j < size; j++) {
                 vector<string> nodesVisited;
-                if(DFS_inside(access.first,partition.getAccessNodes()[j],red,partition,nodesVisited)==IS_CONNECTED){
+                if (DFS_inside(access.first, partition.getAccessNodes()[j], red, partition, nodesVisited) == IS_CONNECTED) {
                     access.second = partition.getAccessNodes()[j];
                     foundConnected = true;
-                    eraseSubVector(redNodes,nodesVisited);
+                    eraseSubVector(redNodes, nodesVisited);
 
                     break;
                 }
             }
-            if(!foundConnected){
-                return(false);
+            if (!foundConnected) {
+                return (false);
             }
             //verifica no blue se os mesmos pontos de entrada e saida funcionam
             {
                 vector<string> nodesVisited;
-                if(DFS_inside(access.first,access.second,blue,partition,nodesVisited)==IS_CONNECTED){
-                    eraseSubVector(blueNodes,nodesVisited);
-                }else{
+                if (DFS_inside(access.first, access.second, blue, partition, nodesVisited) == IS_CONNECTED) {
+                    eraseSubVector(blueNodes, nodesVisited);
+                } else {
                     //a entrada e saida encontrada no red não funciona no blue também
-                    return(false);
+                    return (false);
                 }
             }
         }
         //depois de encontrar todas as entradas e saidas, é necessário verificar se todos os nós da partição foram percorridos pelos dois pais
-        if(redNodes.empty() && blueNodes.empty()){
-            return(true);
-        }else{
-            return(false);
+        if (redNodes.empty() && blueNodes.empty()) {
+            return (true);
+        } else {
+            return (false);
         }
     }
 }
@@ -557,66 +568,63 @@ cityMap mapToTour(Tour& t)
     return (aux); // retorna o mpaa com os nodes já instanciados e adicionados
 }
 
-void createGhosts(cityMap& red, cityMap& blue, cityMap& unitedGraph){
-    
-    for(auto city : unitedGraph){
-        //grau 4
-        if(city.second->getEdges().size() == 4){
+void createGhosts(cityMap& red, cityMap& blue)
+{
+    set<string> isGhost;
+    // The SET containner does not allow repeated values inside yourself
 
-            vector<CityNode::node> edges = red[city.first]->getEdges();
-            string ghostID = city.first + "-";
-            double x = city.second->getX(), y = city.second->getY();
+    for (auto& city : red) {
 
-            CityNode *newNode = new CityNode(ghostID,x,y);
-            
-            for(int i=0; i < 2; i++){  // just two edges
-                CityNode::node redNode = red[edges[0].first]->getEdges()[i];
+        string idKey = city.first;
+        if (idKey.find("-") == string::npos) { // the node is not a ghost
 
-                if(redNode.first.compare(city.first)==0){   
-
-                    double tmp = redNode.second;
-
-                    red[edges[0].first]->deleteEdge(i);
-                    red[edges[0].first]->addEdge(CityNode::node(ghostID,tmp));
-                }
+            for (unsigned i = 0; i < 2; i++) {
+                isGhost.insert(city.second->getEdges()[i].first);
+                isGhost.insert(blue[idKey]->getEdges()[i].first);
             }
 
-            newNode->addEdge(CityNode::node(edges[0].first,edges[0].second));
-            newNode->addEdge(CityNode::node(city.first,0));
-            newNode->setAccess(true);
-            red.insert(make_pair(ghostID,newNode));
-            
-            red[city.first]->deleteEdge(0);
-            red[city.first]->addEdge(CityNode::node(ghostID,0));
-            
-            edges = blue[city.first]->getEdges();
-            newNode = new CityNode(ghostID,x,y);
+            if (isGhost.size() == 4) { // node with degree 4
+                cout << "Grau 4" << endl;
+                string ghostID = idKey + "-";
+                double x = city.second->getX(), y = city.second->getY();
 
-            for(int i=0;i < 2;i++){  // just two edges
-                CityNode::node blueNode = blue[edges[0].first]->getEdges()[i];
+                CityNode* ghostNode = new CityNode(ghostID, x, y);
+                insertGhost(idKey, red, ghostNode);
 
-                if(blueNode.first.compare(city.first)==0){   
-                    double tmp = blueNode.second;
-                    
-                    blue[edges[0].first]->deleteEdge(i);
-                    blue[edges[0].first]->addEdge(CityNode::node(ghostID,tmp));
-                }
+                ghostNode = new CityNode(ghostID, x, y);
+                insertGhost(idKey, blue, ghostNode);
             }
 
-            newNode->addEdge(CityNode::node(edges[0].first,edges[0].second));
-            newNode->addEdge(CityNode::node(city.first,0));
-
-            newNode->setAccess(true);
-            blue.insert(make_pair(ghostID,newNode));
-            
-            blue[city.first]->deleteEdge(0);
-            blue[city.first]->addEdge(CityNode::node(ghostID,0));
+            isGhost.clear();
         }
     }
-    deleteMap(unitedGraph);
-    unitedGraph.clear();
-    joinGraphs(red,blue,unitedGraph);
-    cutCommonEdges(unitedGraph);
+}
+
+void insertGhost(string& id, cityMap& tour, CityNode* ghost)
+{
+    CityNode::node edgeFirst = tour[id]->getEdges()[0]; // edge que será mandado para o ghost
+    tour[id]->deleteEdge(0); // delete edge
+    tour[id]->addEdge(CityNode::node(ghost->getId(), 0)); // adiciona ao node "REAL" o edge de ligação com o ghost
+
+    for (unsigned i=0; i<2; i++) {
+        // percorre os edges de ligação com o nó que foi para o ghost
+        CityNode::node edge = tour[edgeFirst.first]->getEdges()[i];
+
+        if (edge.first.compare(id) == 0) { // verifica se é a ligação
+
+            // adiciona a ligação ao ghost e deleta do "REAL"
+            double distTmp = edge.second;
+
+            tour[edgeFirst.first]->deleteEdge(i);
+            tour[edgeFirst.first]->addEdge(CityNode::node(ghost->getId(), edgeFirst.second));
+        }
+    }
+
+    ghost->addEdge(edgeFirst); // faz o ghost se ligar ao edge
+    ghost->setAccess(true);
+    ghost->addEdge(CityNode::node(tour[id]->getId(), 0)); // adiciona o REAL como um edge do ghost
+
+    tour.insert(make_pair(ghost->getId(), ghost));  // insere o ghost no mapPai
 }
 
 void printMap(cityMap& m)
@@ -641,12 +649,12 @@ double distance(double x1, double y1, double x2, double y2)
     return (sqrt(pow((x1 - x2), 2) + pow((y1 - y2), 2)));
 }
 
-
-void eraseSubVector(vector<string> &vec,vector<string> &subvec){
-    for(unsigned i=0;i<subvec.size();i++){
-        for(unsigned j=0;vec.size();j++){
-            if(subvec[i].compare(vec[j])==0){
-                vec.erase(vec.begin()+j);
+void eraseSubVector(vector<string>& vec, vector<string>& subvec)
+{
+    for (unsigned i = 0; i < subvec.size(); i++) {
+        for (unsigned j = 0; vec.size(); j++) {
+            if (subvec[i].compare(vec[j]) == 0) {
+                vec.erase(vec.begin() + j);
                 break;
             }
         }

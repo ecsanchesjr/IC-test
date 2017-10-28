@@ -7,4 +7,4 @@ build:
 	g++ -std=gnu++14 $(SOURCES) -o a.out -fsanitize=leak
 
 run:
-	@./a.out
+	@./a.out > log.txt
