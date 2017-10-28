@@ -38,22 +38,23 @@ Tour GPX2::crossover(Tour red, Tour blue)
     cout << "Step 8" << endl;
     buildOffspring(partitionsChoosen, allPartitions, redMap, blueMap);
     removeGhosts(redMap);
-
+    removeGhosts(blueMap);
+    
     // Step 9
-    cout << "Step 9" << endl;
+    cout << "Step 9 bla" << endl;
     Tour t = mapToTour(redMap);
 
+    cout<<"chegou nos deletes"<<endl;
     // Deletar as coisas
-/*   deleteMap(redMap);
+    deleteMap(redMap);
     deleteMap(blueMap);
-    deleteMap(unitedGraph); */
+    deleteMap(unitedGraph); 
 
-    unitedGraph.clear();
-    redMap.clear();
-    blueMap.clear();
+    cout<<"chegou nos clears"<<endl;
     partitionsChoosen.clear();
     allPartitions.clear();
 
+    cout<<"chegou no return"<<endl;
     return t;
 }
 
@@ -465,7 +466,9 @@ void GPX2::buildOffspring(vector<int>& partitionsChoose, partitionMap& allPartit
                 delete red.at(s);
                 red.erase(s);
 
-                red.insert(make_pair(s, blue.at(s)));
+                CityNode *newNode = new CityNode(blue.at(s)->getId(),blue.at(s)->getX(),blue.at(s)->getY());
+                newNode->setEdges(blue.at(s)->getEdges());
+                red.insert(make_pair(s, newNode));
             }
         }
         index++;
@@ -595,10 +598,11 @@ void GPX2::deleteMap(cityMap& m)
 { // deletar o mapa completamente,
     // desalocando os ponteiros tb
 
-    for (cityMap::iterator it = m.begin(); it != m.end(); it++) {
-        delete it->second;
-        it->second = nullptr;
+    for (auto &it : m) {
+        delete it.second;
+        it.second = nullptr;
     }
+    m.clear();
 }
 
 int GPX2::DFS_outside(string id, cityMap unitedGraph, partitionMap allPartitions)
