@@ -4,41 +4,55 @@ Tour GPX2::crossover(Tour red, Tour blue)
 {
     partitionMap allPartitions;
     cityMap unitedGraph;
-
+    
     // Step 1
     cityMap redMap = tourToMap(red);
     cityMap blueMap = tourToMap(blue);
 
     // Step 2
+    cout << "Step 2" << endl;
     createGhosts(redMap, blueMap);
 
     // Step 3
+    cout << "Step 3" << endl;
     joinGraphs(redMap, blueMap, unitedGraph);
 
     // Step 4
+    cout << "Step 4" << endl;
     cutCommonEdges(unitedGraph);
 
     // Step 5
+    cout << "Step 5" << endl;
     findAllPartitions(unitedGraph, allPartitions);
     cleanInsideAccess(unitedGraph, allPartitions);
 
     // Step 6
+    cout << "Step 6" << endl;
     checkAllPartitions(redMap, blueMap, unitedGraph, allPartitions);
 
     // Step 7
+    cout << "Step 7" << endl;
     vector<int> partitionsChoosen = choose(redMap, blueMap, allPartitions);
 
     // Step 8
+    cout << "Step 8" << endl;
     buildOffspring(partitionsChoosen, allPartitions, redMap, blueMap);
     removeGhosts(redMap);
 
     // Step 9
+    cout << "Step 9" << endl;
     Tour t = mapToTour(redMap);
 
     // Deletar as coisas
-    deleteMap(redMap);
+/*   deleteMap(redMap);
     deleteMap(blueMap);
-    deleteMap(unitedGraph);
+    deleteMap(unitedGraph); */
+
+    unitedGraph.clear();
+    redMap.clear();
+    blueMap.clear();
+    partitionsChoosen.clear();
+    allPartitions.clear();
 
     return t;
 }
@@ -152,21 +166,51 @@ void GPX2::insertGhost(string& id, cityMap& tour, CityNode* ghost)
 void GPX2::joinGraphs(
     cityMap& red, cityMap& blue, cityMap& unitedGraph)
 { // executa a união dos dois grafos, gerando Gu
-    vector<string> cityList;
+
+    cout << "red"<<endl;
+    printMap(red);
+    cout<<"-------------------------"<<endl;
+    cout << "blue"<<endl;
+    printMap(blue);
+
+    vector<string> cityList, cityList2;
     for (auto node : red) {
         cityList.push_back(node.first);
     }
+    for (auto node : blue) {
+        cityList2.push_back(node.first);
+    }
+
+    cout << "RedList"<<endl;
+    for(auto city : cityList){
+        cout << city << " ";
+    }
+    cout<<endl;
+    cout<<"BlueList"<<endl;
+    for(auto city : cityList2){
+        cout << city << " ";
+    }
+
+    cout << "First stop"<<endl;
     for (string id : cityList) {
         CityNode* c = red[id];
         // criar a entrada no map da união
+        cout << "id " <<id<<endl;
         unitedGraph.insert(
             make_pair((c->getId()), new CityNode((c->getId()), c->getX(), c->getY())));
-
+            cout << "Second stop"<<endl;
         // colocar as edges no map da união
         for (CityNode::node n : red[(c->getId())]->getEdges()) {
             unitedGraph[(c->getId())]->addEdge(make_pair(n.first, n.second));
         }
+        cout << "ThirdStyop" <<endl;
+        cout << c->getId()<<" bug "<<endl;
+        cout<<"test"<<endl;
+        cout<<blue.at(c->getId())->getId()<<endl;
+        cout<<"passou do at"<<endl;
+        cout<<"blue " <<blue[c->getId()]->getId()<<endl;
         for (CityNode::node n : blue[(c->getId())]->getEdges()) {
+            cout << "n " << n.first<<endl;
             unitedGraph[(c->getId())]->addEdge(make_pair(n.first, n.second));
         }
     }
@@ -553,6 +597,7 @@ void GPX2::deleteMap(cityMap& m)
 
     for (cityMap::iterator it = m.begin(); it != m.end(); it++) {
         delete it->second;
+        it->second = nullptr;
     }
 }
 
@@ -697,7 +742,7 @@ double GPX2::parcialDistance(string entry, string exit, cityMap father, Partitio
 void GPX2::printMap(cityMap& m)
 {
     for (map<string, CityNode*>::iterator it = m.begin(); it != m.end(); it++) {
-        cout << " " << it->first << " | " << it->second->getId() << endl;
+        cout << " " << it->first << " | " << m[it->first]->getId() << endl;
         cout << "Acess: " << it->second->getAccess() << endl;
         cout << "==================================" << endl;
 
