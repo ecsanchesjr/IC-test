@@ -1,0 +1,9 @@
+[X] Mapear os Tours
+[X] Adicionar os Ghosts
+[X] Unir os grafos
+[X] Cortar arestas iguais
+[X] Encontrar partições
+[X] Verificar se são recombinantes
+[ ] Escolher partições para filho
+[ ] Montar o filho
+[ ] Linearizar o mapa do filho
