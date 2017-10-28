@@ -33,6 +33,7 @@ class GPX2 {
         CONNECTED_TO_SELF,
         IS_CONNECTED,
         IS_NOT_CONNECTED };
+    enum parent{RED,BLUE};
 
 public:
     //mudar para Tour depois, quando estiver gerando o resultado do crossover
@@ -63,6 +64,9 @@ private:
     static bool checkPartition(cityMap, cityMap, cityMap&, Partition&);
     static void checkAllPartitions(cityMap, cityMap, cityMap&, partitionMap&);
 
+    // Step 7 - Escolher partições para o filho
+    static vector<int> choose(cityMap,cityMap,partitionMap);
+
     // Utilities
     static double distance(double, double, double, double);
     static void printMap(cityMap&);
@@ -72,6 +76,8 @@ private:
     static vector<string> CityToString(vector<City>);
     static int DFS_inside(string, string, cityMap, Partition, vector<string>&);
     static int DFS_outside(string, cityMap, partitionMap);
+
+    static double parcialDistance(string, string, cityMap, Partition);
 };
 
 #endif

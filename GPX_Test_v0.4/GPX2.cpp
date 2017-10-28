@@ -25,6 +25,19 @@ void GPX2::crossover(Tour red, Tour blue)
     // Step 6
     checkAllPartitions(redMap, blueMap, unitedGraph, allPartitions);
 
+    /* 
+        TESTES
+    */
+    vector<int> test = choose(redMap,blueMap,allPartitions);
+    
+    for(int i : test){
+        if(i==RED){
+            cout<<"RED"<<endl;
+        }else{
+            cout<<"BLUE"<<endl;
+        }
+    }
+
     // Deletar as coisas
     deleteMap(redMap);
     deleteMap(blueMap);
@@ -62,7 +75,6 @@ int GPX2::DFS_inside(string entry, string exit, cityMap father, Partition partit
     vector<string> partition = partitionObj.getNodes();
     bool notAlreadyVisited{ false };
     bool notToVisit{ false };
-    bool notExit{ false };
     bool isInPartition{ false };
 
     nextToVisit.push_back(entry);
@@ -135,6 +147,44 @@ int GPX2::DFS_outside(string id, cityMap unitedGraph, partitionMap allPartitions
         //partitions[idPartition].getConnectedTo().push_back(partitionConnected);
         return CONNECTED_TO_PARTITION;
     }
+}
+
+double GPX2::parcialDistance(string entry, string exit, cityMap father, Partition partitionObj)
+{
+    //fazer uma busca em profundidade dentro da partição
+    string now;
+    vector<string> alreadyVisited;
+    deque<string> nextToVisit;
+    vector<string> partition = partitionObj.getNodes();
+    bool notAlreadyVisited{ false };
+    bool notToVisit{ false };
+    bool isInPartition{ false };
+
+    double totalDistance{0};
+
+    nextToVisit.push_back(entry);
+
+    while (!nextToVisit.empty()) {
+
+        now = nextToVisit.back();
+        nextToVisit.pop_back();
+        alreadyVisited.push_back(now);
+        vector<CityNode::node> edges = father[now]->getEdges();
+
+        for (CityNode::node cn : edges) {
+
+            notAlreadyVisited = (find(alreadyVisited.begin(), alreadyVisited.end(), cn.first) == alreadyVisited.end());
+            notToVisit = (find(nextToVisit.begin(), nextToVisit.end(), cn.first) == nextToVisit.end());
+            isInPartition = (find(partition.begin(), partition.end(), cn.first) != partition.end());
+
+            if (notAlreadyVisited && notToVisit && isInPartition) {
+                totalDistance+=cn.second;
+                nextToVisit.push_back(cn.first);
+            }
+        }
+    }
+
+    return totalDistance;
 }
 
 void GPX2::joinGraphs(
@@ -501,4 +551,24 @@ void GPX2::eraseSubVector(vector<string>& vec, vector<string>& subvec)
             }
         }
     }
+}
+
+vector<int> GPX2::choose(cityMap red,cityMap blue,partitionMap allPartitions){
+    vector<int> partitionsChoosen;
+    for(auto p : allPartitions){
+        int index{0};
+        double totalRed{0.0}, totalBlue{0.0};
+        vector<string> accessVec = p.second.getAccessNodes();
+        for(unsigned i=0;i<accessVec.size()/2;i++){
+            totalRed = parcialDistance(accessVec.at(index),accessVec.at(i+1),red,p.second);
+            totalBlue = parcialDistance(accessVec.at(index),accessVec.at(i+1),blue,p.second);
+            index++;
+        }
+        if(totalRed<totalBlue){
+            partitionsChoosen.push_back(RED);
+        }else{
+            partitionsChoosen.push_back(BLUE);
+        }
+    }
+    return partitionsChoosen;
 }
