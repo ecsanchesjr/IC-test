@@ -33,10 +33,10 @@ class GPX2 {
         CONNECTED_TO_SELF,
         IS_CONNECTED,
         IS_NOT_CONNECTED };
-    enum parent{RED,BLUE};
+    enum parent { RED,
+        BLUE };
 
 public:
-    //mudar para Tour depois, quando estiver gerando o resultado do crossover
     // Método principal do funcionamento do crossover, recebe dois pais e retorna um Tour filho
     static Tour crossover(Tour, Tour);
 
@@ -65,27 +65,26 @@ private:
     static void checkAllPartitions(cityMap, cityMap, cityMap&, partitionMap&);
 
     // Step 7 - Escolher partições para o filho
-    static vector<int> choose(cityMap,cityMap,partitionMap);
+    static vector<int> choose(cityMap, cityMap, partitionMap);
 
-    // Step 8 - Irá executar a montagem do mapa do filho
+    // Step 8 - Irá gerar o mapa do filho e depois remover os ghosts
     static void buildOffspring(vector<int>&, partitionMap&, cityMap&, cityMap&);
+    static void removeGhosts(cityMap&);
+    ;
 
     // Step 9 - Irá linearizar o mapa do filho para formato Tour
     static Tour mapToTour(cityMap&);
 
     // Utilities
+    static vector<string> cityToString(vector<City>);
+    static void deleteMap(cityMap&);
+    static int DFS_outside(string, cityMap, partitionMap);
+    static int DFS_inside(string, string, cityMap, Partition, vector<string>&);
     static double distance(double, double, double, double);
+    static void eraseSubVector(vector<string>&, vector<string>&);
+    static double parcialDistance(string, string, cityMap, Partition);
     static void printMap(cityMap&);
     static int whichPartition(const string, partitionMap);
-    static void eraseSubVector(vector<string>&, vector<string>&);
-    static void deleteMap(cityMap&);
-    static vector<string> CityToString(vector<City>);
-    static int DFS_inside(string, string, cityMap, Partition, vector<string>&);
-    static int DFS_outside(string, cityMap, partitionMap);
-
-    static void removeGhosts(cityMap&);
-
-    static double parcialDistance(string, string, cityMap, Partition);
 };
 
 #endif
