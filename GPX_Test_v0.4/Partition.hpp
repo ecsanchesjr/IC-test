@@ -12,7 +12,7 @@ using std::endl;
 
 class Partition {
 
-    friend ostream& operator<<(ostream&, Partition&);
+    friend ostream& operator<<(ostream&, const Partition&);
 
 public:
     Partition();
@@ -20,11 +20,9 @@ public:
 
     vector<string>& getNodes();
     vector<string>& getAccessNodes();
-    //vector<string>& getConnectedTo();
     int getId();
 
     void setId(const int);
-    //void setConnectedTo(vector<string>&);
     void setNodes(vector<string>&);
     void setAccessNodes(vector<string>&);
 
@@ -32,7 +30,6 @@ private:
     int id;
     vector<string> nodes;
     vector<string> accessNodes;
-    //vector<string> connectedTo;
 };
 
 #endif

@@ -8,17 +8,12 @@ Partition::Partition(const int id, vector<string> nodes, vector<string> accessNo
 
 vector<string>& Partition::getNodes() { return (nodes); }
 vector<string>& Partition::getAccessNodes() { return (accessNodes); }
-/* vector<string>& Partition::getConnectedTo(){ return(connectedTo); } */
 int Partition::getId() { return (id); }
 
 void Partition::setId(const int id)
 {
     this->id = id;
 }
-
-/* void Partition::setConnectedTo(vector<string>& connectedTo){
-    this->connectedTo = connectedTo;
-} */
 
 void Partition::setNodes(vector<string>& nodes)
 {
@@ -30,7 +25,7 @@ void Partition::setAccessNodes(vector<string>& accessNodes)
     this->accessNodes = accessNodes;
 }
 
-ostream& operator<<(ostream& output, Partition& partition)
+ostream& operator<<(ostream& output, const Partition& partition)
 {
     output << "Partition " << partition.id << endl;
     output << "Nodes: ";
