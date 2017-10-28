@@ -25,6 +25,10 @@ void GPX2::crossover(Tour red, Tour blue)
     // Step 6
     checkAllPartitions(redMap, blueMap, unitedGraph, allPartitions);
 
+    for(auto const &part : allPartitions){
+        cout << part.second << endl;
+    }
+
     // Deletar as coisas
     deleteMap(redMap);
     deleteMap(blueMap);
