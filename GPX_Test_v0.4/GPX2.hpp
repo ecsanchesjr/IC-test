@@ -166,55 +166,41 @@ void cleanInsideAccess(cityMap unitedGraph, partitionMap& allPartitions)
     }
 }
 
-int DFS_inside(string entry, string exit, cityMap father, Partition partitionObj, vector<string>& returnVector)
+int DFS_inside(string entry, string exit, cityMap father, Partition partitionObj,vector<string> &returnVector)
 {
-    string now;
-    vector<string> alreadyVisited;
-    deque<string> nextToVisit;
-    vector<string> partition = partitionObj.getNodes();
-    bool notAlreadyVisited{ false };
-    bool notToVisit{ false };
-    bool notExit{ false };
-
-    alreadyVisited.push_back(entry);
-
-    for (CityNode::node cn : father[entry]->getEdges()) {
-        //pega o nó que está dentro da partição
-        if (find(partition.begin(), partition.end(), cn.first) != partition.end()) {
-            nextToVisit.push_back(cn.first);
-            break;
-        }
-    }
-
-    while (!nextToVisit.empty()) {
-
-        now = nextToVisit.back();
-        nextToVisit.pop_back();
-        alreadyVisited.push_back(now);
-        vector<CityNode::node> edges = father[now]->getEdges();
-
-        for (CityNode::node cn : edges) {
-
-            notAlreadyVisited = (find(alreadyVisited.begin(), alreadyVisited.end(), cn.first) == alreadyVisited.end());
-            notToVisit = (find(nextToVisit.begin(), nextToVisit.end(), cn.first) == nextToVisit.end());
-            notExit = cn.first != exit;
-
-            if (notAlreadyVisited && notToVisit && notExit) {
-                nextToVisit.push_back(cn.first);
-            }
-            if (!notExit) {
-                alreadyVisited.push_back(cn.first);
-            }
-        }
-    }
-    /* cout<<"already visited"<<endl;
-    for(int i : alreadyVisited){
-        cout<<i<<" ";
-    }
-    cout<<endl;
-    cout<<"last node visited "<<alreadyVisited.back()<<" exit "<<exit<<endl; */
-    returnVector = alreadyVisited;
-    return (alreadyVisited.back() == exit ? IS_CONNECTED : IS_NOT_CONNECTED);
+     //fazer uma busca em profundidade dentro da partição
+     string now;
+     vector<string> alreadyVisited;
+     deque<string> nextToVisit;
+     vector<string> partition = partitionObj.getNodes();
+     bool notAlreadyVisited{ false };
+     bool notToVisit{ false };
+     bool notExit{ false };
+     bool isInPartition {false};
+ 
+     nextToVisit.push_back(entry);
+ 
+     while (!nextToVisit.empty()) {
+ 
+         now = nextToVisit.back();
+         nextToVisit.pop_back();
+         alreadyVisited.push_back(now);
+         vector<CityNode::node> edges = father[now]->getEdges();
+ 
+         for (CityNode::node cn : edges) {
+             
+             notAlreadyVisited = (find(alreadyVisited.begin(), alreadyVisited.end(), cn.first) == alreadyVisited.end());
+             notToVisit = (find(nextToVisit.begin(), nextToVisit.end(), cn.first) == nextToVisit.end());
+             isInPartition = (find(partition.begin(),partition.end(),cn.first) != partition.end());
+ 
+             if (notAlreadyVisited && notToVisit && isInPartition) {
+                 nextToVisit.push_back(cn.first);
+             }
+         }
+     }
+     
+     returnVector = alreadyVisited;
+     return (alreadyVisited.back() == exit ? IS_CONNECTED : IS_NOT_CONNECTED);
 }
 
 int DFS_outside(string id, cityMap unitedGraph, partitionMap allPartitions)
@@ -231,22 +217,7 @@ int DFS_outside(string id, cityMap unitedGraph, partitionMap allPartitions)
 
     nextToVisit.push_back(id);
 
-    /* for (CityNode::node cn : unitedGraph[id]->getEdges()) {
-        //percorrer pela aresta que tem custo zero
-        if (cn.second == 0) {
-            cout<<"id "<<id<<endl;
-            cout<<"next to visit: "<<cn.first<<endl;
-            nextToVisit.push_back(cn.first);
-            break;
-        }
-    } */
-    /* cout<<"new DFS"<<endl; */
     while (!nextToVisit.empty()) {
-        /* cout<<"nextToVisit ";
-        for(string s : nextToVisit){
-            cout<<s<<" ";
-        }
-        cout<<endl; */
         now = nextToVisit.back();
         nextToVisit.pop_back();
 
@@ -254,7 +225,6 @@ int DFS_outside(string id, cityMap unitedGraph, partitionMap allPartitions)
 
         vector<CityNode::node> edges = unitedGraph[now]->getEdges();
 
-        /* cout<<"now "<<now<<endl; */
 
         for (CityNode::node cn : edges) {
             notAlreadyVisited = (find(alreadyVisited.begin(), alreadyVisited.end(), cn.first) == alreadyVisited.end());
@@ -262,8 +232,7 @@ int DFS_outside(string id, cityMap unitedGraph, partitionMap allPartitions)
             cutEdge = cn.second == 0;
 
             if (notAlreadyVisited && notToVisit && cutEdge) {
-                /* cout<<"next to visit "<<cn.first<<endl;
-                 */ nextToVisit.push_back(cn.first);
+                 nextToVisit.push_back(cn.first);
             }
         }
     }
@@ -271,15 +240,6 @@ int DFS_outside(string id, cityMap unitedGraph, partitionMap allPartitions)
     //pegar o id da partition do nó que passou por último
     partitionConnected = whichPartition(alreadyVisited.back(), allPartitions);
 
-    /* //not already in connected list
-    if (find(
-            partitions[idPartition].getConnectedTo().begin(),
-            partitions[idPartition].getConnectedTo().end(),
-            partitionConnected)
-        == partitions[idPartition].getConnectedTo().end()) {
-        partitions[idPartition].getConnectedTo().push_back(partitionConnected);
-    } */
-    //connectado nele mesmo
     if (idPartition == partitionConnected) {
         //se conectar em si mesmo, seta o nó de entrada e o ultimo onde chegou como não access
         unitedGraph[id]->setAccess(false);
