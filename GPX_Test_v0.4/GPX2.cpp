@@ -25,23 +25,14 @@ void GPX2::crossover(Tour red, Tour blue)
     // Step 6
     checkAllPartitions(redMap, blueMap, unitedGraph, allPartitions);
 
-    /* 
-        TESTES
-    */
-    vector<int> test = choose(redMap,blueMap,allPartitions);
+    // Step 7
+    vector<int> partitionsChoosen = choose(redMap,blueMap,allPartitions);
     
-    for(int i : test){
-        if(i==RED){
-            cout<<"RED"<<endl;
-        }else{
-            cout<<"BLUE"<<endl;
-        }
-    }
+    // Step 8
+    buildOffspring(partitionsChoosen, allPartitions, redMap, blueMap);
 
-    buildOffspring(test, allPartitions, redMap, blueMap);
+    // Step 9 - ACABAR A MERDA
 
-    printMap(redMap);
-    
     // Deletar as coisas
     deleteMap(redMap);
     deleteMap(blueMap);
