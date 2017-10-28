@@ -1,7 +1,7 @@
 #ifndef CITY_H
 #define CITY_H
 
-class City{
+class City {
 public:
     City();
     City(int, double, double);
@@ -13,6 +13,7 @@ public:
     int getId();
     double getX();
     double getY();
+
 private:
     int id;
     double x;

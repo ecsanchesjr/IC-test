@@ -1,30 +1,27 @@
 #ifndef CITYNODE_HPP
 #define CITYNODE_HPP
 
-#include <vector>
-#include <utility>
+#include <algorithm>
 #include <iostream>
 #include <string>
-#include <algorithm>
+#include <utility>
+#include <vector>
 
-#include "Tour.hpp"
 #include "City.hpp"
+#include "Tour.hpp"
 
 using std::remove;
 using std::cout;
 using std::endl;
-using std::string; 
+using std::string;
 using std::pair;
 using std::vector;
 
-class CityNode{
+class CityNode {
 public:
-    //estamos usando map, podemos usar ele para navegar o grafo
-    //typedef pair<CityNode*,double> node;    
-
     //deixando o typedef assim então
     //int seria o ID, usando o id no map, podemos ir direto para o objeto
-    typedef pair<string,double> node;        
+    typedef pair<string, double> node;
 
     CityNode(string, double, double);
 

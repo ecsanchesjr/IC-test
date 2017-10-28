@@ -1,3 +1,3 @@
 #include "ListOfCities.hpp"
 
-vector<City>& ListOfCities::getCitiesList(){ return(citiesList); }
+vector<City>& ListOfCities::getCitiesList() { return (citiesList); }
