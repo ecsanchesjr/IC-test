@@ -653,14 +653,14 @@ Tour GPX2::mapToTour(cityMap& mapOffspring){
 
     nextToVisit.push_back(city->getEdges()[0].first);
 
-    while(nextToVisit.empty()){
+    while(!nextToVisit.empty()){
 
         isAlreadyVisited.push_back(nextToVisit.front());
         city = mapOffspring[nextToVisit.front()];
         nextToVisit.pop_front();
 
         offspring.getTour().push_back( City( stoi(city->getId()), city->getX(), city->getY() ) );
-
+        
         for(CityNode::node n : city->getEdges()){
 
             notAlreadyVisited = find( isAlreadyVisited.begin(), isAlreadyVisited.end(), n.first ) == isAlreadyVisited.end();

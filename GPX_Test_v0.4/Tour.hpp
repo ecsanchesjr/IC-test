@@ -2,6 +2,7 @@
 #define TOUR_HPP
 
 #include "City.hpp"
+#include <cmath>
 #include <vector>
 
 using std::vector;
@@ -14,6 +15,10 @@ public:
     void setTour(vector<City>);
 
     vector<City>& getTour();
+
+    double getFitness();
+
+    double distance(const int,const int);
 
 private:
     vector<City> tour;
