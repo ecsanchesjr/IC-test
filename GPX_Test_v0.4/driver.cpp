@@ -45,5 +45,6 @@ int main()
     Tour t(cities);
     Tour t2(cities2);
 
-    GPX2(t, t2);
+    GPX2::crossover(t, t2);
+    cout<<"THE END"<<endl;
 }

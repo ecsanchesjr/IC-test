@@ -373,7 +373,7 @@ int GPX2::whichPartition(const string id, partitionMap allPartitions)
     return (-1);
 }
 
-cityMap GPX2::mapToTour(Tour& t)
+GPX2::cityMap GPX2::mapToTour(Tour& t)
 { // Mapear o tour para um grafo com ligações entre os nós
 
     if (t.getTour().empty()) {
