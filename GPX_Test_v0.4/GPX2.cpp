@@ -574,3 +574,60 @@ void GPX2::buildOffspring(vector<int>& partitionsChoose, partitionMap& allPartit
         index++;
     }
 }
+
+void GPX2::removeGhosts(cityMap &graph){
+    for(auto node : graph){
+        unsigned index = node.first.find("-"); 
+        if(index!=string::npos){
+            //pegar o id do nó sem o token de ghost
+            string id = node.first;
+            id.erase(index,node.first.size());
+
+            //pegar os dois nós que estão ligados ao nó normal e ao ghost
+            
+            //iterando pelos edges do nó normal
+            vector<CityNode::node> edges = graph[id]->getEdges();
+            unsigned edgeToDelete{0};
+            CityNode::node prev,next;
+            for(unsigned i=0;i<edges.size();i++){
+                //se encontrar a edge ligada ao nó ghost
+                if(edges.at(i).first.compare(node.first)==0){
+                    edgeToDelete = i;
+                }else{
+                    prev = edges.at(i);
+                }
+            }
+            graph[id]->deleteEdge(edgeToDelete);
+
+            edges = graph[node.first]->getEdges();
+
+            for(unsigned i=0;i<edges.size();i++){
+                //encontrar o nó que não é o normal na lista de edges
+                if(!(edges.at(i).first.compare(id)==0)){   
+                    next = edges.at(i);
+                    break;
+                }
+            }
+
+            //ligar o nó normal no next
+            graph[id]->addEdge(next);
+            
+            //arrumar as edges do next
+            edges = graph[next.first]->getEdges();
+            for(unsigned i=0;i<edges.size();i++){
+                //encontrou a edge que referencia ao ghost
+                if(edges.at(i).first.compare(node.first)==0){
+                    edgeToDelete = i;
+                    break;
+                }
+            }
+            graph[next.first]->deleteEdge(edgeToDelete);
+
+            graph[next.first]->addEdge(make_pair(id,next.second));
+
+            //deletar o nó ghost
+            delete graph[node.first];
+            graph.erase(node.first);
+        }
+    }
+}

@@ -80,6 +80,8 @@ private:
     static int DFS_inside(string, string, cityMap, Partition, vector<string>&);
     static int DFS_outside(string, cityMap, partitionMap);
 
+    static void removeGhosts(cityMap&);
+
     static double parcialDistance(string, string, cityMap, Partition);
 };
 
